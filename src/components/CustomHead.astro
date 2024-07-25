@@ -1,0 +1,8 @@
+---
+import Default from '@astrojs/starlight/components/Head.astro';
+---
+
+<Default {...Astro.props}>
+  <link rel="stylesheet" href="/src/styles/global.css" />
+  <slot />
+</Default>

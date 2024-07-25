@@ -1,0 +1,62 @@
+---
+const userRole = Astro.cookies.get('userRole')?.value;
+if (userRole && userRole !== 'klient') {
+  return Astro.redirect('/');
+}
+---
+
+<html>
+  <head>
+    <title>Login</title>
+  </head>
+  <body>
+    <form id="login-form">
+      <div>
+        <label for="username">Username:</label>
+        <input type="text" id="username" name="username" required />
+      </div>
+      <div>
+        <label for="password">Password:</label>
+        <input type="password" id="password" name="password" required />
+      </div>
+      <p id="error" style="color: red;"></p>
+      <button type="submit">Login</button>
+    </form>
+
+    <script>
+      async function handleSubmit(event) {
+        event.preventDefault();
+        const formData = new FormData(event.target);
+        const username = formData.get('username');
+        const password = formData.get('password');
+
+        try {
+          const response = await fetch('/api/auth/login', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ username, password }),
+          });
+
+          if (response.ok) {
+            const data = await response.json();
+            console.log('Received token:', data.token);
+            localStorage.setItem('token', data.token);
+            document.cookie = `token=${data.token}; path=/; max-age=3600; SameSite=Lax; Secure`;
+            console.log('Token saved to localStorage and cookie');
+            window.location.href = '/';
+          } else {
+            const error = await response.text();
+            document.getElementById('error').textContent = error;
+          }
+        } catch (error) {
+          document.getElementById('error').textContent = 'Something went wrong';
+          console.error('Error during login:', error);
+        }
+      }
+
+      document.getElementById('login-form').addEventListener('submit', handleSubmit);
+    </script>
+  </body>
+</html> 

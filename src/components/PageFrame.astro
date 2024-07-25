@@ -1,0 +1,22 @@
+---
+import type { Props } from '@astrojs/starlight/props';
+import Default from '@astrojs/starlight/components/PageFrame.astro';
+import { generateSidebar } from '../utils/sidebarUtils';
+import { getPrevNextLinks } from '@astrojs/starlight/utils/navigation';
+
+const { props } = Astro;
+const userRole = Astro.locals.user ? Astro.locals.user.role : 'klient';
+
+const dynamicSidebar = generateSidebar(userRole);
+
+const { prev, next } = getPrevNextLinks(dynamicSidebar, true, {});
+
+const modifiedProps = {
+  ...props,
+  pagination: { prev, next }
+};
+---
+
+<Default {...modifiedProps}>
+  <slot />
+</Default>

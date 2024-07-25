@@ -1,0 +1,174 @@
+---
+import type { Props } from '@astrojs/starlight/props'
+import StarlightPage from '@astrojs/starlight/components/StarlightPage.astro'
+import { verifyToken } from '../lib/auth';
+import { generateSidebar } from '../utils/sidebarUtils';
+
+let user = Astro.locals.user;
+const userRole = Astro.locals.userRole || 'klient';
+console.log('Userrole:', userRole);
+const dynamicSidebar = generateSidebar(userRole);
+// Sprawdź token w ciasteczku, jeśli user nie jest ustawiony
+if (!user) {
+  const token = Astro.cookies.get('token')?.value;
+  if (token) {
+    try {
+      user = verifyToken(token);
+    } catch (error) {
+      console.error('Invalid token:', error);
+    }
+  }
+}
+
+const title = "title kurwa";
+const description = "Get started building your docs site with Starlight.";
+const tagline = "super kurwo";
+
+const logoutButton = user ? {
+  text: "Wyloguj",
+  link: "#",
+  icon: "right-arrow",
+  variant: "primary",
+  id: "logout-button",
+  class: "logout-button astro-button",
+  'data-logout': 'true',
+  custom: true
+} : {
+  text: "Zaloguj",
+  link: "/login",
+  icon: "right-arrow",
+  variant: "primary"
+};
+
+const frontmatter = {
+  title: title,
+  description: description,
+  template: 'splash',
+  hero: {
+    tagline: tagline,
+    actions: [
+      logoutButton,
+      {
+        text: "Przejdź do dokumentacji Flightcore",
+        link: "https://starlight.astro.build",
+        icon: "external"
+      }
+    ]
+  }
+};
+---
+
+<StarlightPage
+  frontmatter={frontmatter}
+  hasSidebar={true}
+  sidebar={dynamicSidebar}
+  >
+
+  
+  <div id="content">
+    {user ? (
+      <div>
+        <h1>Welcome, {user.ksywa || user.username}!</h1>
+        <p>This is the more extensive version of the index page for logged-in users.</p>
+      </div>
+    ) : (
+      <div>
+        <h1>Welcome to the Index Page</h1>
+        <p>Please log in to see more content.</p>
+      </div>
+    )}
+  </div>
+</StarlightPage>
+
+<script>
+  function handleLogout(event) {
+    event.preventDefault();
+    console.log('Logout function called');
+    
+    fetch('/api/auth/logout', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    })
+    .then(response => {
+      console.log('Logout response status:', response.status);
+      if (response.ok) {
+        console.log('Logout successful');
+        localStorage.removeItem('token');
+        document.cookie = 'token=; Max-Age=0; path=/; domain=' + location.hostname;
+        window.location.href = '/';
+      } else {
+        console.error('Logout failed');
+      }
+    })
+    .catch(error => {
+      console.error('Error during logout:', error);
+    });
+  }
+
+  function setupLogoutButton() {
+    // Szukamy przycisku po tekście "Wyloguj"
+    const buttons = Array.from(document.querySelectorAll('a, button'));
+    const logoutButton = buttons.find(button => button.textContent.trim() === 'Wyloguj');
+    
+    if (logoutButton) {
+      console.log('Logout button found:', logoutButton);
+      logoutButton.addEventListener('click', handleLogout);
+      
+      // Dodajemy nasze własne atrybuty
+      logoutButton.setAttribute('data-logout', 'true');
+      logoutButton.id = 'logout-button';
+      logoutButton.classList.add('logout-button', 'astro-button');
+    } else {
+      console.log('Logout button not found');
+    }
+  }
+
+  function attemptSetup() {
+    setupLogoutButton();
+    if (!document.querySelector('[data-logout]')) {
+      console.log('Retrying setup...');
+      setTimeout(attemptSetup, 500);
+    }
+  }
+
+  // Próbujemy ustawić przycisk po załadowaniu DOM
+  document.addEventListener('DOMContentLoaded', attemptSetup);
+
+  // Próbujemy ustawić przycisk po pełnym załadowaniu strony
+  window.addEventListener('load', attemptSetup);
+
+  // Nasłuchujemy na zdarzenie Astro
+  document.addEventListener('astro:page-load', attemptSetup);
+
+  // Sprawdzamy, czy użytkownik jest zalogowany po stronie klienta
+  const token = localStorage.getItem('token');
+  if (token) {
+    fetch('/api/auth/me', {
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
+    })
+    .then(response => response.json())
+    .then(user => {
+      const content = document.getElementById('content');
+      if (content) {
+        content.innerHTML = `
+          <div>
+            <h1>Welcome, ${user.ksywa || user.username}!</h1>
+            <p>This is the more extensive version of the index page for logged-in users.</p>
+          </div>
+        `;
+      }
+      attemptSetup();
+    })
+    .catch(error => {
+      console.error('Error fetching user data:', error);
+      localStorage.removeItem('token');
+    });
+  }
+
+  console.log('Script loaded');
+</script>
+

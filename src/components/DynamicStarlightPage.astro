@@ -1,0 +1,14 @@
+---
+import type { Props } from '@astrojs/starlight/props'
+import StarlightPage from '@astrojs/starlight/components/StarlightPage.astro'
+import { generateSidebar } from '../utils/sidebarUtils';
+
+const { props } = Astro;
+const userRole = Astro.locals.userRole || 'klient';
+const dynamicSidebar = generateSidebar(userRole);
+
+---
+
+<StarlightPage {...props} sidebar={dynamicSidebar}>
+  <slot />
+</StarlightPage>

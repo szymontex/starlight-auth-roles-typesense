@@ -1,0 +1,35 @@
+---
+const token = localStorage.getItem('token');
+let content = null;
+let error = null;
+
+if (token) {
+  const response = await fetch('/api/protected', {
+    headers: {
+      'Authorization': `Bearer ${token}`
+    }
+  });
+
+  if (response.ok) {
+    const data = await response.json();
+    content = data.content;
+  } else {
+    error = 'Unauthorized';
+  }
+} else {
+  error = 'Unauthorized';
+}
+---
+
+<html>
+  <body>
+    {error ? (
+      <p>{error}</p>
+    ) : (
+      <div>
+        <h1>Protected Content</h1>
+        <p>{content}</p>
+      </div>
+    )}
+  </body>
+</html>

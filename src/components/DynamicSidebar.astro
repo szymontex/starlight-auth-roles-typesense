@@ -1,0 +1,36 @@
+---
+import type { Props } from '@astrojs/starlight/props';
+import Default from '@astrojs/starlight/components/Sidebar.astro';
+import { generateSidebar } from '../utils/sidebarUtils';
+
+const { props } = Astro;
+const userRole = Astro.locals.user?.role || Astro.cookies.get('userRole')?.value || 'klient';
+
+console.log('DynamicSidebar: userRole:', userRole);
+
+const dynamicSidebar = generateSidebar(userRole);
+
+// Konwertuj dynamicSidebar do formatu oczekiwanego przez Starlight
+const convertedSidebar = dynamicSidebar.map(group => ({
+  type: 'group',
+  label: group.label,
+  entries: group.entries.map(entry => ({
+    type: 'link',
+    label: entry.label,
+    href: entry.href,
+    isCurrent: entry.href === Astro.url.pathname,
+    badge: undefined,
+    attrs: {}
+  }))
+}));
+
+const modifiedProps = {
+  ...props,
+  sidebar: convertedSidebar
+};
+
+console.log('DynamicSidebar is being rendered');
+console.log('Converted Sidebar:', JSON.stringify(convertedSidebar, null, 2));
+---
+
+<Default {...modifiedProps} />
