@@ -3,6 +3,9 @@ import starlight from '@astrojs/starlight';
 
 export default defineConfig({
   output: 'server',
+  // experimental: {
+  //   serverIslands: true,
+  // },
   integrations: [
     starlight({
       title: 'dupa psia',
@@ -21,4 +24,5 @@ export default defineConfig({
     }),
   ],
   middleware: './src/middleware.ts',
+
 });

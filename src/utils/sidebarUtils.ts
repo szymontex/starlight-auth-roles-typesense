@@ -1,46 +1,42 @@
-export function generateSidebar(userRole: string) {
+console.log('utils/sidebarUtils.ts');
+
+export function generateSidebar(userRole: string, currentPathname: string) {
+  // const allSidebarItems = [
+  //   {
+  //     label: 'Admin Panel',
+  //     entries: [
+  //       { label: 'Admin test', href: '/admin/testowy' },
+  //     ],
+  //   },
+  //   {
+  //     label: 'Spółka',
+  //     entries: [
+  //       { label: 'Spółka Guide', href: '/spolka/testowy' },
+  //     ],
+  //   },
+  //   {
+  //     label: 'Realizator',
+  //     entries: [
+  //       { label: 'Realizator Guide', href: '/realizator/testowy' },
+  //     ],
+  //   },
+  //   {
+  //     label: 'Klient',
+  //     entries: [
+  //       { label: 'Klient Guide', href: '/klient/testowy' },
+  //     ],
+  //   },
+  // ];
   const allSidebarItems = [
     {
-      label: 'Admin Panel',
-      entries: [
-        { label: 'Admin test', href: '/admin/testowy' },
+      label: 'Admin Group',
+      items: [
+        { link: '/admin/testowy', label: 'Admin test' },
+        // Add more links here...
       ],
     },
-    {
-      label: 'Spółka',
-      entries: [
-        { label: 'Spółka Guide', href: '/spolka/testowy' },
-      ],
-    },
-    {
-      label: 'Realizator',
-      entries: [
-        { label: 'Realizator Guide', href: '/realizator/testowy' },
-      ],
-    },
-    {
-      label: 'Klient',
-      entries: [
-        { label: 'Klient Guide', href: '/klient/testowy' },
-      ],
-    },
+    // Add more groups or individual links here...
   ];
-
-  console.log('generateSidebar userRole:', userRole);
-
-  switch (userRole) {
-    case 'admin':
-      console.log('Returning admin sidebar');
-      return allSidebarItems;
-    case 'spolka':
-      console.log('Returning spolka sidebar');
-      return allSidebarItems.slice(1);
-    case 'realizator':
-      console.log('Returning realizator sidebar');
-      return allSidebarItems.slice(2);
-    case 'klient':
-    default:
-      console.log('Returning klient sidebar');
-      return allSidebarItems.slice(3);
-  }
+  
+  return allSidebarItems;
 }

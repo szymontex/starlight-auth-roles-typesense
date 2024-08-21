@@ -6,7 +6,7 @@ import { generateSidebar } from '../utils/sidebarUtils';
 const { props } = Astro;
 const userRole = Astro.locals.user?.role || Astro.cookies.get('userRole')?.value || 'klient';
 
-console.log('CustomPage: userRole:', userRole);
+console.log('components/CustomPage.astro: userRole:', userRole);
 
 const dynamicSidebar = generateSidebar(userRole);
 

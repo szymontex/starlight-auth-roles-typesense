@@ -5,32 +5,30 @@ import { generateSidebar } from '../utils/sidebarUtils';
 
 const { props } = Astro;
 const userRole = Astro.locals.user?.role || Astro.cookies.get('userRole')?.value || 'klient';
+const currentPathname = Astro.url.pathname;
 
 console.log('DynamicSidebar: userRole:', userRole);
 
-const dynamicSidebar = generateSidebar(userRole);
+const dynamicSidebar = generateSidebar(userRole) || [];
 
 // Konwertuj dynamicSidebar do formatu oczekiwanego przez Starlight
-const convertedSidebar = dynamicSidebar.map(group => ({
-  type: 'group',
-  label: group.label,
-  entries: group.entries.map(entry => ({
-    type: 'link',
-    label: entry.label,
-    href: entry.href,
-    isCurrent: entry.href === Astro.url.pathname,
-    badge: undefined,
-    attrs: {}
-  }))
-}));
+// const convertedSidebar = dynamicSidebar.map(item => ({
+//   type: 'link',
+//   label: item.label, // Możesz tutaj dostosować sposób generowania etykiety
+//   href: link.link,
+//   isCurrent: item.link === Astro.url.pathname,
+//   badge: undefined,
+//   attrs: {}
+// }));
 
-const modifiedProps = {
-  ...props,
-  sidebar: convertedSidebar
-};
+// const modifiedProps = {
+//   ...props,
+//   sidebar: convertedSidebar
+// };
 
-console.log('DynamicSidebar is being rendered');
-console.log('Converted Sidebar:', JSON.stringify(convertedSidebar, null, 2));
+console.log('components/DynamicSidebar.astro is being rendered');
+console.log('components/DynamicSidebar.astro Converted Sidebar:', JSON.stringify(dynamicSidebar, null, 2));
+
 ---
 
-<Default {...modifiedProps} />
+<Default {...props} sidebar={dynamicSidebar} />

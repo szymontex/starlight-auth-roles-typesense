@@ -4,10 +4,10 @@ import StarlightPage from '@astrojs/starlight/components/StarlightPage.astro'
 import { verifyToken } from '../lib/auth';
 import { generateSidebar } from '../utils/sidebarUtils';
 
+console.log('pages/index.astro');
+
 let user = Astro.locals.user;
-const userRole = Astro.locals.userRole || 'klient';
-console.log('Userrole:', userRole);
-const dynamicSidebar = generateSidebar(userRole);
+
 // Sprawdź token w ciasteczku, jeśli user nie jest ustawiony
 if (!user) {
   const token = Astro.cookies.get('token')?.value;
@@ -15,10 +15,21 @@ if (!user) {
     try {
       user = verifyToken(token);
     } catch (error) {
-      console.error('Invalid token:', error);
+      console.error('pages/index.astro Invalid token:', error);
     }
   }
 }
+
+// Dodaj sprawdzanie, czy user istnieje, zanim uzyskasz dostęp do jego właściwości
+if (user) {
+  console.log('pages/index.astro User ID:', user.id);
+  console.log('pages/index.astro User username:', user.username);
+  console.log('pages/index.astro User role:', user.role);
+}
+
+const userRole = user?.role || 'klient';
+console.log('pages/index.astro Userrole:', userRole);
+const dynamicSidebar = generateSidebar(userRole);
 
 const title = "title kurwa";
 const description = "Get started building your docs site with Starlight.";
