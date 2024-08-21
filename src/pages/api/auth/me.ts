@@ -2,6 +2,8 @@
 import type { APIRoute } from 'astro';
 import { verifyToken } from '../../../lib/auth';
 
+console.log('pages/api/auth/me.ts');
+
 export const GET: APIRoute = async ({ request }) => {
   const token = request.headers.get('Authorization')?.split(' ')[1];
 

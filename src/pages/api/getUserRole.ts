@@ -1,5 +1,7 @@
 import type { APIRoute } from 'astro';
 
+console.log('pages/api/getUserRole.ts');
+
 export const get: APIRoute = ({ cookies }) => {
   const userRole = cookies.get('userRole')?.value || 'klient';
   return new Response(JSON.stringify({ role: userRole }), {

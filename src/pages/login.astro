@@ -3,6 +3,7 @@ const userRole = Astro.cookies.get('userRole')?.value;
 if (userRole && userRole !== 'klient') {
   return Astro.redirect('/');
 }
+console.log('pages/login.astro');
 ---
 
 <html>
@@ -24,7 +25,7 @@ if (userRole && userRole !== 'klient') {
     </form>
 
     <script>
-      async function handleSubmit(event) {
+      async function handleSubmit(event: { preventDefault: () => void; target: HTMLFormElement | undefined; }) {
         event.preventDefault();
         const formData = new FormData(event.target);
         const username = formData.get('username');
@@ -41,10 +42,10 @@ if (userRole && userRole !== 'klient') {
 
           if (response.ok) {
             const data = await response.json();
-            console.log('Received token:', data.token);
+            console.log('pages/login.astro Received token:', data.token);
             localStorage.setItem('token', data.token);
             document.cookie = `token=${data.token}; path=/; max-age=3600; SameSite=Lax; Secure`;
-            console.log('Token saved to localStorage and cookie');
+            console.log('pages/login.astro Token saved to localStorage and cookie');
             window.location.href = '/';
           } else {
             const error = await response.text();
@@ -52,7 +53,7 @@ if (userRole && userRole !== 'klient') {
           }
         } catch (error) {
           document.getElementById('error').textContent = 'Something went wrong';
-          console.error('Error during login:', error);
+          console.error('pages/login.astro Error during login:', error);
         }
       }
 

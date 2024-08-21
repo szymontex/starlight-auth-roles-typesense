@@ -1,6 +1,6 @@
 console.log('utils/sidebarUtils.ts');
 
-export function generateSidebar(userRole: string, currentPathname: string) {
+export function generateSidebar(userRole: string) {
   // const allSidebarItems = [
   //   {
   //     label: 'Admin Panel',
@@ -29,14 +29,45 @@ export function generateSidebar(userRole: string, currentPathname: string) {
   // ];
   const allSidebarItems = [
     {
-      label: 'Admin Group',
+      label: 'Admin',
       items: [
         { link: '/admin/testowy', label: 'Admin test' },
-        // Add more links here...
       ],
     },
-    // Add more groups or individual links here...
+    {
+      label: 'Spółka',
+      items: [
+        { link: '/spolka/testowy', label: 'Spółka Guide' },
+      ],
+    },
+    {
+      label: 'Realizator',
+      items: [
+        { link: '/realizator/testowy', label: 'Realizator Guide' },
+      ],
+    },
+    {
+      label: 'Klient',
+      items: [
+        { link: '/klient/testowy', label: 'Klient Guide' },
+      ],
+    },
   ];
-  
-  return allSidebarItems;
+  console.log('utils/sidebarUtils.ts UserRole:', userRole);
+  switch (userRole) {
+    case 'admin':
+      return allSidebarItems; // Zwraca wszystkie elementy
+
+    case 'spolka':
+      return allSidebarItems.filter(item => item.label !== 'Admin'); // Zwraca wszystkie bez Admin
+
+    case 'realizator':
+      return allSidebarItems.filter(item => item.label !== 'Admin' && item.label !== 'Spółka'); // Zwraca wszystkie bez Admin i Spółka
+
+    case 'klient':
+      return allSidebarItems.filter(item => item.label === 'Klient'); // Zwraca tylko Klient
+
+    default:
+      return []; // W razie gdyby userRole nie pasował do żadnego z powyższych
+  }
 }

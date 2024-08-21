@@ -6,6 +6,8 @@ import jwt from 'jsonwebtoken';
 import mysql, { type FieldPacket } from 'mysql2/promise';
 import dotenv from 'dotenv';
 
+console.log('lib/auth.ts');
+
 dotenv.config();
 
 const secret: string = process.env.AUTH_SECRET!;
@@ -21,24 +23,24 @@ const db = mysql.createPool({
 passport.use(new LocalStrategy(
   async (username, password, done) => {
     try {
-      console.log('Authenticating user:', username);
+      console.log('lib/auth.ts Authenticating user:', username);
       const [rows]: [any[], FieldPacket[]] = await db.query('SELECT id, ksywa, haslo, uprawnienia FROM realizatorzy WHERE ksywa = ?', [username]);
       const user = rows[0];
       if (!user) {
-        console.error('User not found:', username);
+        console.error('lib/auth.ts User not found:', username);
         return done(null, false, { message: 'Incorrect username.' });
       }
       const res = await bcrypt.compare(password, user.haslo);
-      console.log('Comparing passwords:', { enteredPassword: password, storedHash: user.haslo, result: res });
+      console.log('lib/auth.ts Comparing passwords:', { enteredPassword: password, storedHash: user.haslo, result: res });
       if (res) {
-        console.log('Password match successful for user:', username);
+        console.log('lib/auth.ts Password match successful for user:', username);
         return done(null, user);
       } else {
-        console.error('Password does not match for user:', username);
+        console.error('lib/auth.ts Password does not match for user:', username);
         return done(null, false, { message: 'Incorrect password.' });
       }
     } catch (err) {
-      console.error('Error during authentication:', err);
+      console.error('lib/auth.ts Error during authentication:', err);
       return done(err);
     }
   }

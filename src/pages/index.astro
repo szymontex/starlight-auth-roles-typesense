@@ -94,7 +94,7 @@ const frontmatter = {
 <script>
   function handleLogout(event) {
     event.preventDefault();
-    console.log('Logout function called');
+    console.log('pages/index.astro Logout function called');
     
     fetch('/api/auth/logout', {
       method: 'POST',
@@ -103,18 +103,18 @@ const frontmatter = {
       }
     })
     .then(response => {
-      console.log('Logout response status:', response.status);
+      console.log('pages/index.astro Logout response status:', response.status);
       if (response.ok) {
-        console.log('Logout successful');
+        console.log('pages/index.astro Logout successful');
         localStorage.removeItem('token');
         document.cookie = 'token=; Max-Age=0; path=/; domain=' + location.hostname;
         window.location.href = '/';
       } else {
-        console.error('Logout failed');
+        console.error('pages/index.astro Logout failed');
       }
     })
     .catch(error => {
-      console.error('Error during logout:', error);
+      console.error('pages/index.astro Error during logout:', error);
     });
   }
 
@@ -124,7 +124,7 @@ const frontmatter = {
     const logoutButton = buttons.find(button => button.textContent.trim() === 'Wyloguj');
     
     if (logoutButton) {
-      console.log('Logout button found:', logoutButton);
+      console.log('pages/index.astro Logout button found:', logoutButton);
       logoutButton.addEventListener('click', handleLogout);
       
       // Dodajemy nasze własne atrybuty
@@ -132,14 +132,14 @@ const frontmatter = {
       logoutButton.id = 'logout-button';
       logoutButton.classList.add('logout-button', 'astro-button');
     } else {
-      console.log('Logout button not found');
+      console.log('pages/index.astro Logout button not found');
     }
   }
 
   function attemptSetup() {
     setupLogoutButton();
     if (!document.querySelector('[data-logout]')) {
-      console.log('Retrying setup...');
+      console.log('pages/index.astro Retrying setup...');
       setTimeout(attemptSetup, 500);
     }
   }
@@ -175,11 +175,11 @@ const frontmatter = {
       attemptSetup();
     })
     .catch(error => {
-      console.error('Error fetching user data:', error);
+      console.error('pages/index.astro Error fetching user data:', error);
       localStorage.removeItem('token');
     });
   }
 
-  console.log('Script loaded');
+  console.log('pages/index.astro Script loaded');
 </script>
 

@@ -3,11 +3,13 @@ import type { Props } from '@astrojs/starlight/props';
 import Default from '@astrojs/starlight/components/Sidebar.astro';
 import { generateSidebar } from '../utils/sidebarUtils';
 
-const { props } = Astro;
-const userRole = Astro.locals.user?.role || Astro.cookies.get('userRole')?.value || 'klient';
-const currentPathname = Astro.url.pathname;
+console.log('components/DynamicSidebar.astro');
 
-console.log('DynamicSidebar: userRole:', userRole);
+const { props } = Astro;
+const userRole = Astro.cookies.get('userRole')?.value || 'klient';
+// const currentPathname = Astro.url.pathname;
+
+console.log('components/DynamicSidebar.astro userRole:', userRole);
 
 const dynamicSidebar = generateSidebar(userRole) || [];
 
@@ -30,5 +32,5 @@ console.log('components/DynamicSidebar.astro is being rendered');
 console.log('components/DynamicSidebar.astro Converted Sidebar:', JSON.stringify(dynamicSidebar, null, 2));
 
 ---
-
-<Default {...props} sidebar={dynamicSidebar} />
+<!-- <Default {...props} sidebar={dynamicSidebar} /> -->
+<Default {...props} />

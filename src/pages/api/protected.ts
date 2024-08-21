@@ -1,5 +1,7 @@
 import { verifyToken } from '../../lib/auth';
 
+console.log('pages/api/protected.ts');
+
 export async function get({ request }: { request: Request }) {
   const authHeader = request.headers.get('Authorization');
   const token = authHeader && authHeader.split(' ')[1];

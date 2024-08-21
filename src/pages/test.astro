@@ -2,6 +2,8 @@
 import { getCollection } from 'astro:content';
 import CustomPage from '../components/CustomPage.astro';
 
+console.log('pages/test.astro');
+
 export const prerender = false;
 
 export async function getStaticPaths() {
@@ -16,7 +18,7 @@ const { entry } = Astro.props;
 const { Content } = await entry.render();
 
 const userRole = Astro.locals.user?.role || Astro.cookies.get('userRole')?.value || 'klient';
-console.log('[...slug].astro: userRole:', userRole);
+console.log('pages/test.astro [...slug].astro: userRole:', userRole);
 ---
 
 <CustomPage {...entry.data}>

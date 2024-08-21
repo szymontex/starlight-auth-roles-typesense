@@ -4,8 +4,12 @@ import Default from '@astrojs/starlight/components/PageFrame.astro';
 import { generateSidebar } from '../utils/sidebarUtils';
 import { getPrevNextLinks } from '@astrojs/starlight/utils/navigation';
 
+console.log('components/PageFrame.astro');
+
 const { props } = Astro;
-const userRole = Astro.locals.user ? Astro.locals.user.role : 'klient';
+const userRole = Astro.cookies.get('userRole')?.value || 'klient';
+
+console.log('components/PageFrame.astro userRole:', userRole);
 
 const dynamicSidebar = generateSidebar(userRole);
 

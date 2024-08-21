@@ -1,7 +1,9 @@
 import type { APIRoute } from 'astro';
 
+console.log('pages/api/auth/logout.ts');
+
 export const POST: APIRoute = async ({ cookies }) => {
-  console.log('Logout endpoint called');
+  console.log('pages/api/auth/logout.ts Logout endpoint called');
   cookies.delete('token', { path: '/' });
   
   return new Response(JSON.stringify({ success: true }), {

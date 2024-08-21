@@ -3,10 +3,13 @@ import type { Props } from '@astrojs/starlight/props'
 import StarlightPage from '@astrojs/starlight/components/StarlightPage.astro'
 import { generateSidebar } from '../utils/sidebarUtils';
 
+console.log('components/DynamicStarlightPage.astro');
+
 const { props } = Astro;
-const userRole = Astro.locals.userRole || 'klient';
+const userRole = Astro.cookies.get('userRole')?.value || 'klient';
 const dynamicSidebar = generateSidebar(userRole);
 
+console.log('components/DynamicStarlightPage.astro userRole:', userRole);
 ---
 
 <StarlightPage {...props} sidebar={dynamicSidebar}>

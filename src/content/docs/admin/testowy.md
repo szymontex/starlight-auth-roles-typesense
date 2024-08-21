@@ -1,9 +1,10 @@
 ---
-title: "Strona tylko dla admina"
-sidebar:
-  generator: getRoleBasedSidebar
-slug: "admin/testowy"
+title: Admin Testowy
+head:
+  - tag: meta
+    attrs:
+      name: robots
+      content: noindex
 ---
 
-# Treść tylko dla admina
-...
+super dupa \n

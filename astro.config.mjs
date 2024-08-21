@@ -4,14 +4,22 @@ import starlight from '@astrojs/starlight';
 export default defineConfig({
   output: 'server',
   // experimental: {
-  //   serverIslands: true,
+  //   
   // },
+  prefetch: {
+    prefetchAll: false,
+    defaultStrategy: 'viewport',
+  },
+  experimental: {
+    serverIslands: true,
+    clientPrerender: false,
+  },
   integrations: [
     starlight({
       title: 'dupa psia',
       components: {
         Sidebar: './src/components/DynamicSidebar.astro',
-        Page: './src/components/CustomPage.astro',
+        // Page: './src/components/CustomPage.astro',
       },
       defaultLocale: 'root',
       locales: {

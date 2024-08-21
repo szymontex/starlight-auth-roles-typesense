@@ -1,7 +1,9 @@
 import { defineCollection } from 'astro:content';
 import { docsSchema } from '@astrojs/starlight/schema';
 
-export const collectionsp = {
+console.log('content/config.ts');
+
+export const collections = {
   docs: defineCollection({
     schema: docsSchema(),
   }),
