@@ -1,10 +1,6 @@
 ---
 title: Admin Testowy
-head:
-  - tag: meta
-    attrs:
-      name: robots
-      content: noindex
+roles: ['admin']
 ---
 
 super dupa \n

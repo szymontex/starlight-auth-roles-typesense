@@ -9,7 +9,7 @@ export const POST: APIRoute = async ({ request, cookies }) => {
   console.log('pages/api/auth/login.ts Received login request:', { username, password });
 
   return new Promise((resolve) => {
-    passport.authenticate('local', (err, user, info) => {
+    passport.authenticate('local', (err: any, user: any, info: any) => {
       if (err || !user) {
         console.error('pages/api/auth/login.ts Authentication failed:', err || info?.message);
         resolve(new Response('Invalid credentials', { status: 401 }));

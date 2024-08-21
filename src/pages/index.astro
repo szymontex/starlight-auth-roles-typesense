@@ -3,20 +3,18 @@ import type { Props } from '@astrojs/starlight/props'
 import StarlightPage from '@astrojs/starlight/components/StarlightPage.astro'
 import { verifyToken } from '../lib/auth';
 import { generateSidebar } from '../utils/sidebarUtils';
+type StarlightPageFrontmatter = any;
 
 console.log('pages/index.astro');
 
-let user = Astro.locals.user;
-
+let user;
+const token = Astro.cookies.get('token')?.value;
 // Sprawdź token w ciasteczku, jeśli user nie jest ustawiony
-if (!user) {
-  const token = Astro.cookies.get('token')?.value;
-  if (token) {
-    try {
-      user = verifyToken(token);
-    } catch (error) {
-      console.error('pages/index.astro Invalid token:', error);
-    }
+if (token) {
+  try {
+    user = verifyToken(token);
+  } catch (error) {
+    console.error('pages/index.astro Invalid token:', error);
   }
 }
 
@@ -51,21 +49,22 @@ const logoutButton = user ? {
   variant: "primary"
 };
 
-const frontmatter = {
+const frontmatter: StarlightPageFrontmatter = {
   title: title,
   description: description,
   template: 'splash',
   hero: {
     tagline: tagline,
     actions: [
-      logoutButton,
+      logoutButton as any, // Ostatecznie wymuszenie zgodności typów
       {
         text: "Przejdź do dokumentacji Flightcore",
         link: "https://starlight.astro.build",
         icon: "external"
       }
     ]
-  }
+  },
+  // Dodaj inne właściwości, które mogą być wymagane przez StarlightPageFrontmatter
 };
 ---
 
@@ -92,7 +91,7 @@ const frontmatter = {
 </StarlightPage>
 
 <script>
-  function handleLogout(event) {
+  function handleLogout(event: { preventDefault: () => void; }) {
     event.preventDefault();
     console.log('pages/index.astro Logout function called');
     
@@ -121,7 +120,8 @@ const frontmatter = {
   function setupLogoutButton() {
     // Szukamy przycisku po tekście "Wyloguj"
     const buttons = Array.from(document.querySelectorAll('a, button'));
-    const logoutButton = buttons.find(button => button.textContent.trim() === 'Wyloguj');
+    const logoutButton = buttons.find(button => button.textContent?.trim() === 'Wyloguj');
+
     
     if (logoutButton) {
       console.log('pages/index.astro Logout button found:', logoutButton);

@@ -3,28 +3,43 @@ import { Strategy as LocalStrategy } from 'passport-local';
 import { Strategy as JwtStrategy, ExtractJwt } from 'passport-jwt';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
-import mysql, { type FieldPacket } from 'mysql2/promise';
+import mysql, { type FieldPacket, type RowDataPacket } from 'mysql2/promise';
 import dotenv from 'dotenv';
 
 console.log('lib/auth.ts');
 
 dotenv.config();
+const requiredEnv = (key: string): string => {
+  const value = process.env[key];
+  if (!value) {
+    throw new Error(`Missing required environment variable: ${key}`);
+  }
+  return value;
+};
 
 const secret: string = process.env.AUTH_SECRET!;
 
 const db = mysql.createPool({
-  host: process.env.DB_HOST,
-  port: Number(process.env.DB_PORT),
-  user: process.env.DB_USER,
-  password: process.env.DB_PASSWORD,
-  database: process.env.DB_NAME
+  host: requiredEnv('DB_HOST'),
+  port: Number(requiredEnv('DB_PORT')),
+  user: requiredEnv('DB_USER'),
+  password: requiredEnv('DB_PASSWORD'),
+  database: requiredEnv('DB_NAME'),
 });
+
+// Typy danych użytkownika oraz wyników zapytania
+interface UserRow extends RowDataPacket {
+  id: number;
+  ksywa: string;
+  haslo: string;
+  uprawnienia: string;
+}
 
 passport.use(new LocalStrategy(
   async (username, password, done) => {
     try {
       console.log('lib/auth.ts Authenticating user:', username);
-      const [rows]: [any[], FieldPacket[]] = await db.query('SELECT id, ksywa, haslo, uprawnienia FROM realizatorzy WHERE ksywa = ?', [username]);
+      const [rows]: [UserRow[], FieldPacket[]] = await db.query('SELECT id, ksywa, haslo, uprawnienia FROM realizatorzy WHERE ksywa = ?', [username]);
       const user = rows[0];
       if (!user) {
         console.error('lib/auth.ts User not found:', username);
@@ -53,8 +68,8 @@ const opts = {
 
 passport.use(new JwtStrategy(opts, async (jwt_payload, done) => {
   try {
-    const [rows] = await db.query('SELECT id, ksywa, haslo, uprawnienia FROM realizatorzy WHERE id = ?', [jwt_payload.id]);
-    const user = rows[0];
+    const [rows]: [UserRow[], FieldPacket[]] = await db.query('SELECT id, ksywa, haslo, uprawnienia FROM realizatorzy WHERE id = ?', [jwt_payload.id]);
+    const user = rows.length > 0 ? rows[0] : null;
     if (user) {
       return done(null, user);
     } else {
@@ -65,7 +80,7 @@ passport.use(new JwtStrategy(opts, async (jwt_payload, done) => {
   }
 }));
 
-export function generateToken(user: any) {
+export function generateToken(user: UserRow) {
   return jwt.sign({ id: user.id, username: user.ksywa, role: user.uprawnienia }, secret, { expiresIn: '1h' });
 }
 

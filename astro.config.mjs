@@ -1,8 +1,12 @@
 import { defineConfig } from 'astro/config';
 import starlight from '@astrojs/starlight';
+import node from '@astrojs/node'; // Import adaptera Node.js
 
 export default defineConfig({
   output: 'server',
+  adapter: node({
+    mode: 'standalone', // Ustawienie wymaganego trybu działania
+  }),
   // experimental: {
   //   
   // },

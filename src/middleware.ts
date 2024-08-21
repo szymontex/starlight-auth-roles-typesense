@@ -4,7 +4,7 @@ import { verifyToken } from './lib/auth';
 console.log('middleware.ts');
 
 export const onRequest: MiddlewareHandler = async (context, next) => {
-  const { cookies, url, request } = context;
+  const { cookies, url } = context;
   
   console.log('Middleware: Processing request for URL:', url.pathname);
 

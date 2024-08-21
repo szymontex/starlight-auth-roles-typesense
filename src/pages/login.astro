@@ -25,11 +25,12 @@ console.log('pages/login.astro');
     </form>
 
     <script>
-      async function handleSubmit(event: { preventDefault: () => void; target: HTMLFormElement | undefined; }) {
+      async function handleSubmit(event: Event) {
         event.preventDefault();
-        const formData = new FormData(event.target);
-        const username = formData.get('username');
-        const password = formData.get('password');
+        const form = event.target as HTMLFormElement;
+        const formData = new FormData(form);
+        const username = formData.get('username') as string;
+        const password = formData.get('password') as string;
 
         try {
           const response = await fetch('/api/auth/login', {
@@ -49,15 +50,26 @@ console.log('pages/login.astro');
             window.location.href = '/';
           } else {
             const error = await response.text();
-            document.getElementById('error').textContent = error;
+            const errorElement = document.getElementById('error');
+            if (errorElement) {
+              errorElement.textContent = error;
+            }
           }
         } catch (error) {
-          document.getElementById('error').textContent = 'Something went wrong';
+          const errorElement = document.getElementById('error');
+          if (errorElement) {
+            errorElement.textContent = 'Something went wrong';
+          }
           console.error('pages/login.astro Error during login:', error);
         }
       }
 
-      document.getElementById('login-form').addEventListener('submit', handleSubmit);
+      const form = document.getElementById('login-form');
+      if (form) {
+        form.addEventListener('submit', handleSubmit);
+      } else {
+        console.error('Login form not found');
+      }
     </script>
   </body>
-</html> 
+</html>
