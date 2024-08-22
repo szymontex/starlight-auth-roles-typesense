@@ -1,31 +1,58 @@
+console.log('utils/sidebarUtils.ts');
+
 export function generateSidebar(userRole: string) {
+  // const allSidebarItems = [
+  //   {
+  //     label: 'Admin Panel',
+  //     entries: [
+  //       { label: 'Admin test', href: '/admin/testowy' },
+  //     ],
+  //   },
+  //   {
+  //     label: 'Spółka',
+  //     entries: [
+  //       { label: 'Spółka Guide', href: '/spolka/testowy' },
+  //     ],
+  //   },
+  //   {
+  //     label: 'Realizator',
+  //     entries: [
+  //       { label: 'Realizator Guide', href: '/realizator/testowy' },
+  //     ],
+  //   },
+  //   {
+  //     label: 'Klient',
+  //     entries: [
+  //       { label: 'Klient Guide', href: '/klient/testowy' },
+  //     ],
+  //   },
+  // ];
   const allSidebarItems = [
     {
       label: 'Admin',
       items: [
-        { label: 'Admin test', href: '/admin/testowy' },
+        { link: '/admin/testowy', label: 'Admin test' },
       ],
     },
     {
       label: 'Spółka',
       items: [
-        { label: 'Spółka Guide', href: '/spolka/testowy' },
+        { link: '/spolka/testowy', label: 'Spółka Guide' },
       ],
     },
     {
       label: 'Realizator',
       items: [
-        { label: 'Realizator Guide', href: '/realizator/testowy' },
+        { link: '/realizator/testowy', label: 'Realizator Guide' },
       ],
     },
     {
       label: 'Klient',
       items: [
-        { label: 'Klient Guide', href: '/klient/testowy' },
+        { link: '/klient/testowy', label: 'Klient Guide' },
       ],
     },
   ];
-
   console.log('utils/sidebarUtils.ts UserRole:', userRole);
   switch (userRole) {
     case 'admin':

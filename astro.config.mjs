@@ -1,9 +1,11 @@
 import { defineConfig } from 'astro/config';
 import starlight from '@astrojs/starlight';
 import node from '@astrojs/node'; // Import adaptera Node.js
+import { generateSidebar } from './src/utils/sidebarUtils';
 
 export default defineConfig({
   output: 'server',
+  prerender: false,
   adapter: node({
     mode: 'standalone', // Ustawienie wymaganego trybu działania
   }),
@@ -22,7 +24,7 @@ export default defineConfig({
     starlight({
       title: 'dupa psia',
       components: {
-        Sidebar: './src/components/DynamicSidebar.astro',
+        Sidebar: './src/components/Sidebar.astro',
         // Page: './src/components/CustomPage.astro',
       },
       defaultLocale: 'root',
@@ -32,7 +34,7 @@ export default defineConfig({
           lang: 'pl',
         },
       },
-      sidebar: [],
+      // sidebar: generateSidebar('klient'),
     }),
   ],
   middleware: './src/middleware.ts',

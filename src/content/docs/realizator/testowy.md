@@ -1,7 +1,6 @@
 ---
 title: "Strona dla realizatora"
-sidebar:
-  generator: getRoleBasedSidebar
+slug: 'realizator/testowy'
 ---
 
 # to jest testowy realizator

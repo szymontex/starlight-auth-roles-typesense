@@ -12,7 +12,7 @@
   "dependencies": {
     "@astrojs/check": "^0.9.3",
     "@astrojs/node": "^8.3.3",
-    "@astrojs/starlight": "^0.26.1",
+    "@astrojs/starlight": "https://gitpkg.now.sh/Fryuni/starlight/packages/starlight?ssr-support",
     "@auth/core": "^0.34.2",
     "@types/cookie": "^0.6.0",
     "@types/jsonwebtoken": "^9.0.6",

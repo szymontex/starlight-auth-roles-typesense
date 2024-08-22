@@ -1,6 +1,6 @@
 ---
 title: Admin Testowy
-roles: ['admin']
+slug: 'admin/testowy'
 ---
 
 super dupa \n

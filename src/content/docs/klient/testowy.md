@@ -1,6 +1,5 @@
 ---
 title: "testowy"
-sidebar:
-  generator: getRoleBasedSidebar
+slug: 'klient/testowy'
 ---
 super chujnia kkto co?

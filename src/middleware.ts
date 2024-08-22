@@ -1,6 +1,10 @@
 import type { MiddlewareHandler } from 'astro';
 import { verifyToken } from './lib/auth';
 
+interface Locals {
+  userRole?: string;
+}
+
 console.log('middleware.ts');
 
 export const onRequest: MiddlewareHandler = async (context, next) => {
@@ -73,6 +77,8 @@ export const onRequest: MiddlewareHandler = async (context, next) => {
     console.log('Middleware: Access denied for userRole:', userRole, 'to path:', url.pathname);
     return new Response('Brak dostępu - tylko dla Klienta', { status: 403 });
   }
+
+  (context.locals as Locals).userRole = userRole;
 
   const response = await next();
   

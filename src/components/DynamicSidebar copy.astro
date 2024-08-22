@@ -1,0 +1,36 @@
+---
+import type { Props } from '@astrojs/starlight/props';
+import Default from '@astrojs/starlight/components/Sidebar.astro';
+import { generateSidebar } from '../utils/sidebarUtils';
+
+console.log('components/DynamicSidebar.astro');
+
+const { props } = Astro;
+const userRole = Astro.cookies.get('userRole')?.value || 'klient';
+// const currentPathname = Astro.url.pathname;
+
+console.log('components/DynamicSidebar.astro userRole:', userRole);
+
+const dynamicSidebar = generateSidebar(userRole) || [];
+
+// Konwertuj dynamicSidebar do formatu oczekiwanego przez Starlight
+// const convertedSidebar = dynamicSidebar.map(item => ({
+//   type: 'link',
+//   label: item.label, // Możesz tutaj dostosować sposób generowania etykiety
+//   href: link.link,
+//   isCurrent: item.link === Astro.url.pathname,
+//   badge: undefined,
+//   attrs: {}
+// }));
+
+// const modifiedProps = {
+//   ...props,
+//   sidebar: convertedSidebar
+// };
+
+console.log('components/DynamicSidebar.astro is being rendered');
+console.log('components/DynamicSidebar.astro Converted Sidebar:', JSON.stringify(dynamicSidebar, null, 2));
+
+---
+<!-- <Default {...props} sidebar={dynamicSidebar} /> -->
+<Default {...props} />
