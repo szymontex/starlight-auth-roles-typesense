@@ -3,11 +3,23 @@ import type { Props } from '@astrojs/starlight/props';
 
 import MobileMenuFooter from '@astrojs/starlight/components/MobileMenuFooter.astro';
 import SidebarSublist from '@astrojs/starlight/components/SidebarSublist.astro';
+import { generateSidebar } from '../utils/sidebarUtils';
 
 const { sidebar } = Astro.props;
+
+const userRole = Astro.cookies.get('userRole')?.value || 'klient';
+
+console.log('components/Sidebar.astro userRole:', userRole);
+
+const dynamicSidebar = generateSidebar(userRole) || [];
+console.log('components/Sidebar.astro dynamicSidebar:', dynamicSidebar);
+
+if (!dynamicSidebar || dynamicSidebar.some(item => item === undefined || !item.entries)) {
+  console.error('Invalid dynamicSidebar structure detected:', dynamicSidebar);
+}
 ---
 
-<SidebarSublist sublist={sidebar} />
+<SidebarSublist sublist={dynamicSidebar} />
 <div class="md:sl-hidden">
 	<MobileMenuFooter {...Astro.props} />
 </div>
