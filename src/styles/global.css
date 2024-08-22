@@ -1,18 +1,121 @@
 /* Możesz usunąć lub zakomentować te style, jeśli chcesz zachować domyślny wygląd Starlight */
-/*
-body {
-  padding-left: 250px;
+
+
+/* Dark mode colors. */
+:root {
+  --sl-content-width: 55rem;
+  --sl-text-5xl: 1rem;
+  --sl-font: 'TacticRound';
+  --sl-font-bold: 'TacticRound', var(--sl-font);
+  --sl-font-medium: 'TacticRound', var(--sl-font);
+  --sl-font-regular: 'TacticRound', var(--sl-font);
+
+
+	--sl-color-accent-low: #38D430;
+	--sl-color-accent: #38D430;
+	--sl-color-accent-high: #38D430;
+	--sl-color-white: #ffffff;
+	--sl-color-gray-1: #f3ecea;
+	--sl-color-gray-2: #c8c0be;
+	--sl-color-gray-3: #978784;
+	--sl-color-gray-4: #DBE2E6;
+	--sl-color-gray-5: #BACBDA;
+	--sl-color-gray-6: #101820;
+	--sl-color-black: #243447;
+}
+/* Light mode colors. */
+:root[data-theme='light'] {
+	--sl-color-accent-low: #38D430;
+	--sl-color-accent: #38D430;
+	--sl-color-accent-high: #640300;
+	--sl-color-white: #101820;
+	--sl-color-gray-1: #302321;
+	--sl-color-gray-2: #243447;
+	--sl-color-gray-3: #635451;
+	--sl-color-gray-4: #978784;
+	--sl-color-gray-5: #c8c0be;
+	--sl-color-gray-6: #DBE2E6;
+	--sl-color-gray-7: #DBE2E6;
+	--sl-color-black: #DBE2E6;
 }
 
-.starlight-sidebar {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 250px;
-  height: 100vh;
-  background-color: #f0f0f0;
-  padding: 1rem;
-  overflow-y: auto;
-  z-index: 1000;
+
+h1, h2, h3 {
+  font-family: var(--sl-font-bold);
+  font-weight: 400;
+  font-style: normal;
 }
-*/
+
+p, li, a {
+  font-family: var(--sl-font-regular);
+  font-weight: normal;
+}
+
+.subtitle, .medium-text {
+  font-family: var(--sl-font-medium);
+  font-weight: 100;
+}
+
+
+/* Te klasy są opcjonalne, możesz je dostosować lub rozszerzyć według potrzeb. */
+
+/* Stylizowanie kart i przycisków */
+.login-card {
+  background-color: var(--sl-color-gray-6);
+  border-radius: var(--border-radius, 0.5rem);
+  padding: 2rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  max-width: 400px;
+  width: 100%;
+  color: var(--sl-color-white);
+}
+
+.login-card h1 {
+  margin-bottom: 1.5rem;
+  font-size: 1.5rem;
+  text-align: center;
+  color: var(--sl-color-white);
+}
+
+.login-card label {
+  font-weight: 500;
+  margin-bottom: 0.5rem;
+  display: block;
+  color: var(--sl-color-white);
+}
+
+.login-card input[type="text"],
+.login-card input[type="password"] {
+  box-sizing: border-box;
+  display: block;
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid var(--sl-color-gray-5);
+  background: var(--sl-color-gray-6);
+  font-size: 1rem;
+  border-radius: var(--border-radius, 0.5rem);
+  margin-bottom: 1rem;
+  color: var(--sl-color-white);
+}
+
+.login-card button {
+  width: 100%;
+  padding: 0.75rem;
+  border: none;
+  border-radius: var(--border-radius, 0.5rem);
+  background-color: var(--sl-color-accent);
+  color: var(--sl-color-white);
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.login-card button:hover {
+  background-color: var(--sl-color-accent-high);
+}
+
+.login-card #error {
+  color: var(--sl-color-accent-low);
+  margin-top: 1rem;
+  text-align: center;
+}

@@ -39,6 +39,14 @@ export function generateSidebar(userRole: string) {
           isCurrent: false,
           badge: undefined,
           attrs: {}
+        },
+        {
+          type: 'link',
+          label: 'Admin testcopy',
+          href: '/admin/testowycopy',
+          isCurrent: false,
+          badge: undefined,
+          attrs: {}
         }
       ],
       collapsed: false,
@@ -84,6 +92,14 @@ export function generateSidebar(userRole: string) {
           type: 'link',
           label: 'Klient Guide',
           href: '/klient/testowy',
+          isCurrent: false,
+          badge: undefined,
+          attrs: {}
+        },
+        {
+          type: 'link',
+          label: 'Klient Guide',
+          href: '/klient/testowycopy',
           isCurrent: false,
           badge: undefined,
           attrs: {}

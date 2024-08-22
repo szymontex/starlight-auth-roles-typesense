@@ -9,28 +9,44 @@ console.log('pages/login.astro');
 <html>
   <head>
     <title>Login</title>
+    <link rel="stylesheet" href="/src/styles/global.css">
+    <style>
+      body {
+        background-color: var(--sl-color-black);
+        font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        margin: 0;
+        color: var(--sl-color-white);
+      }
+    </style>
   </head>
   <body>
-    <form id="login-form">
-      <div>
-        <label for="username">Username:</label>
-        <input type="text" id="username" name="username" required />
-      </div>
-      <div>
-        <label for="password">Password:</label>
-        <input type="password" id="password" name="password" required />
-      </div>
-      <p id="error" style="color: red;"></p>
-      <button type="submit">Login</button>
-    </form>
+    <div class="login-card">
+      <h1>Login</h1>
+      <form id="login-form">
+        <div>
+          <label for="username">Username:</label>
+          <input type="text" id="username" name="username" required />
+        </div>
+        <div>
+          <label for="password">Password:</label>
+          <input type="password" id="password" name="password" required />
+        </div>
+        <p id="error"></p>
+        <button type="submit">Login</button>
+      </form>
+    </div>
 
     <script>
-      async function handleSubmit(event: Event) {
+      async function handleSubmit(event) {
         event.preventDefault();
-        const form = event.target as HTMLFormElement;
+        const form = event.target;
         const formData = new FormData(form);
-        const username = formData.get('username') as string;
-        const password = formData.get('password') as string;
+        const username = formData.get('username');
+        const password = formData.get('password');
 
         try {
           const response = await fetch('/api/auth/login', {

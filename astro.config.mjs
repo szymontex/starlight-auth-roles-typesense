@@ -5,7 +5,7 @@ import { generateSidebar } from './src/utils/sidebarUtils';
 
 export default defineConfig({
   output: 'server',
-  prerender: false,
+  
   adapter: node({
     mode: 'standalone', // Ustawienie wymaganego trybu działania
   }),
@@ -22,12 +22,29 @@ export default defineConfig({
   },
   integrations: [
     starlight({
-      title: 'dupa psia',
+      title: 'Docs',
+      description: 'Dokumentacja obslugi studia Flightcore',
+      prerender: false,
+      logo: {
+        src: './src/assets/flightcore.svg',
+        
+      },
+      customCss: [
+        // Relative path to your custom CSS file
+        './src/styles/global.css',
+        './src/fonts/font-face.css',
+      ],
+      social: {
+        instagram: 'https://instagram.com/flightcore.studios',
+        email: 'mailto:kontakt@flightcore.pl',
+      },
       components: {
         Sidebar: './src/components/Sidebar.astro',
         PageSidebar: './src/components/PageSidebar.astro',
+        Pagination: './src/components/Pagination.astro',
         // Page: './src/components/CustomPage.astro',
       },
+      
       defaultLocale: 'root',
       locales: {
         root: {

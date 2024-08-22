@@ -1,0 +1,91 @@
+---
+import Icon from './Icon.astro';
+import type { Props } from '@astrojs/starlight/props';
+
+// Odczyt roli użytkownika z ciasteczka
+const userRole = Astro.cookies.get('userRole')?.value || 'klient';
+
+const { dir, labels, pagination } = Astro.props;
+const { prev, next } = pagination;
+const isRtl = dir === 'rtl';
+
+function hasAccessToLink(link: string, role: string): boolean {
+  if (link.startsWith('/admin') && role !== 'admin') return false;
+  if (link.startsWith('/spolka') && (role !== 'admin' && role !== 'spolka')) return false;
+  if (link.startsWith('/realizator') && (role !== 'admin' && role !== 'spolka' && role !== 'realizator')) return false;
+  if (link.startsWith('/klient') && (role !== 'admin' && role !== 'spolka' && role !== 'realizator' && role !== 'klient')) return false;
+  return true;
+}
+
+// Sprawdzenie dostępu do linków na podstawie roli użytkownika
+const prevLink = prev && hasAccessToLink(prev.href as string, userRole) ? prev : null;
+const nextLink = next && hasAccessToLink(next.href as string, userRole) ? next : null;
+---
+
+<div class="pagination-links" dir={dir}>
+	{prevLink && (
+		<a href={prevLink.href as string} rel="prev">
+			<Icon name={isRtl ? 'right-arrow' : 'left-arrow'} size="1.5rem" />
+			<span>
+				{labels['page.previousLink']}
+				<br />
+				<span class="link-title">{prevLink.label}</span>
+			</span>
+		</a>
+	)}
+	{nextLink && (
+		<a href={nextLink.href as string} rel="next">
+			<Icon name={isRtl ? 'left-arrow' : 'right-arrow'} size="1.5rem" />
+			<span>
+				{labels['page.nextLink']}
+				<br />
+				<span class="link-title">{nextLink.label}</span>
+			</span>
+		</a>
+	)}
+</div>
+
+<style>
+	.pagination-links {
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(min(18rem, 100%), 1fr));
+		gap: 1rem;
+	}
+
+	a {
+		display: flex;
+		align-items: center;
+		justify-content: flex-start;
+		gap: 0.5rem;
+		width: 100%;
+		flex-basis: calc(50% - 0.5rem);
+		flex-grow: 1;
+		border: 1px solid var(--sl-color-gray-5);
+		border-radius: 0.5rem;
+		padding: 1rem;
+		text-decoration: none;
+		color: var(--sl-color-gray-2);
+		box-shadow: var(--sl-shadow-md);
+		overflow-wrap: anywhere;
+	}
+
+	[rel='next'] {
+		justify-content: end;
+		text-align: end;
+		flex-direction: row-reverse;
+	}
+
+	a:hover {
+		border-color: var(--sl-color-gray-2);
+	}
+
+	.link-title {
+		color: var(--sl-color-white);
+		font-size: var(--sl-text-2xl);
+		line-height: var(--sl-line-height-headings);
+	}
+
+	svg {
+		flex-shrink: 0;
+	}
+</style>

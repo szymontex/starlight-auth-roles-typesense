@@ -1,0 +1,252 @@
+/* TacticRound Regular */
+@font-face {
+    font-family: 'TacticRound';
+    src: url('./TacticRound-Reg.woff2') format('woff2');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+  }
+  
+  /* TacticRound Italic */
+  @font-face {
+    font-family: 'TacticRound';
+    src: url('./TacticRound-It.woff2') format('woff2');
+    font-weight: normal;
+    font-style: italic;
+    font-display: swap;
+  }
+  
+  /* TacticRound Bold */
+  @font-face {
+    font-family: 'TacticRound';
+    src: url('./TacticRound-Bld.woff2') format('woff2');
+    font-weight: bold;
+    font-style: normal;
+    font-display: swap;
+  }
+  
+  /* TacticRound Bold Italic */
+  @font-face {
+    font-family: 'TacticRound';
+    src: url('./TacticRound-BldIt.woff2') format('woff2');
+    font-weight: bold;
+    font-style: italic;
+    font-display: swap;
+  }
+  
+  /* TacticRound Black */
+  @font-face {
+    font-family: 'TacticRound';
+    src: url('./TacticRound-Blk.woff2') format('woff2');
+    font-weight: 900;
+    font-style: normal;
+    font-display: swap;
+  }
+  
+  /* TacticRound Black Italic */
+  @font-face {
+    font-family: 'TacticRound';
+    src: url('./TacticRound-BlkIt.woff2') format('woff2');
+    font-weight: 900;
+    font-style: italic;
+    font-display: swap;
+  }
+  
+  /* TacticRound Light */
+  @font-face {
+    font-family: 'TacticRound';
+    src: url('./TacticRound-Lgt.woff2') format('woff2');
+    font-weight: 300;
+    font-style: normal;
+    font-display: swap;
+  }
+  
+  /* TacticRound Light Italic */
+  @font-face {
+    font-family: 'TacticRound';
+    src: url('./TacticRound-LgtIt.woff2') format('woff2');
+    font-weight: 300;
+    font-style: italic;
+    font-display: swap;
+  }
+  
+  /* TacticRound Medium */
+  @font-face {
+    font-family: 'TacticRound';
+    src: url('./TacticRound-Med.woff2') format('woff2');
+    font-weight: 500;
+    font-style: normal;
+    font-display: swap;
+  }
+  
+  /* TacticRound Medium Italic */
+  @font-face {
+    font-family: 'TacticRound';
+    src: url('./TacticRound-MedIt.woff2') format('woff2');
+    font-weight: 500;
+    font-style: italic;
+    font-display: swap;
+  }
+  
+  /* TacticRound Thin */
+  @font-face {
+    font-family: 'TacticRound';
+    src: url('./TacticRound-Thn.woff2') format('woff2');
+    font-weight: 100;
+    font-style: normal;
+    font-display: swap;
+  }
+  
+  /* TacticRound Thin Italic */
+  @font-face {
+    font-family: 'TacticRound';
+    src: url('./TacticRound-ThnIt.woff2') format('woff2');
+    font-weight: 100;
+    font-style: italic;
+    font-display: swap;
+  }
+  
+  /* TacticRound UltraLight */
+  @font-face {
+    font-family: 'TacticRound';
+    src: url('./TacticRound-Ult.woff2') format('woff2');
+    font-weight: 200;
+    font-style: normal;
+    font-display: swap;
+  }
+  
+  /* TacticRound UltraLight Italic */
+  @font-face {
+    font-family: 'TacticRound';
+    src: url('./TacticRound-UltIt.woff2') format('woff2');
+    font-weight: 200;
+    font-style: italic;
+    font-display: swap;
+  }
+  
+  /* TacticRound Extended Regular */
+  @font-face {
+    font-family: 'TacticRoundExtExd';
+    src: url('./TacticRoundExtExd-Reg.woff2') format('woff2');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+  }
+  
+  /* TacticRound Extended Bold */
+  @font-face {
+    font-family: 'TacticRoundExtExd';
+    src: url('./TacticRoundExtExd-Bld.woff2') format('woff2');
+    font-weight: bold;
+    font-style: normal;
+    font-display: swap;
+  }
+  
+  /* TacticRound Extended Black */
+  @font-face {
+    font-family: 'TacticRoundExtExd';
+    src: url('./TacticRoundExtExd-Blk.woff2') format('woff2');
+    font-weight: 900;
+    font-style: normal;
+    font-display: swap;
+  }
+  
+  /* TacticRound Extended Light */
+  @font-face {
+    font-family: 'TacticRoundExtExd';
+    src: url('./TacticRoundExtExd-Lgt.woff2') format('woff2');
+    font-weight: 300;
+    font-style: normal;
+    font-display: swap;
+  }
+  
+  /* TacticRound Extended Medium */
+  @font-face {
+    font-family: 'TacticRoundExtExd';
+    src: url('./TacticRoundExtExd-Med.woff2') format('woff2');
+    font-weight: 500;
+    font-style: normal;
+    font-display: swap;
+  }
+  
+  /* TacticRound Extended Thin */
+  @font-face {
+    font-family: 'TacticRoundExtExd';
+    src: url('./TacticRoundExtExd-Thn.woff2') format('woff2');
+    font-weight: 100;
+    font-style: normal;
+    font-display: swap;
+  }
+  
+  /* TacticRound Extended UltraLight */
+  @font-face {
+    font-family: 'TacticRoundExtExd';
+    src: url('./TacticRoundExtExd-Ult.woff2') format('woff2');
+    font-weight: 200;
+    font-style: normal;
+    font-display: swap;
+  }
+  
+  /* TacticRound Extended Regular Italic */
+  @font-face {
+    font-family: 'TacticRoundExtExd';
+    src: url('./TacticRoundExtExd-RegIt.woff2') format('woff2');
+    font-weight: normal;
+    font-style: italic;
+    font-display: swap;
+  }
+  
+  /* TacticRound Extended Bold Italic */
+  @font-face {
+    font-family: 'TacticRoundExtExd';
+    src: url('./TacticRoundExtExd-BldIt.woff2') format('woff2');
+    font-weight: bold;
+    font-style: italic;
+    font-display: swap;
+  }
+  
+  /* TacticRound Extended Black Italic */
+  @font-face {
+    font-family: 'TacticRoundExtExd';
+    src: url('./TacticRoundExtExd-BlkIt.woff2') format('woff2');
+    font-weight: 900;
+    font-style: italic;
+    font-display: swap;
+  }
+  
+  /* TacticRound Extended Light Italic */
+  @font-face {
+    font-family: 'TacticRoundExtExd';
+    src: url('./TacticRoundExtExd-LgtIt.woff2') format('woff2');
+    font-weight: 300;
+    font-style: italic;
+    font-display: swap;
+  }
+  
+  /* TacticRound Extended Medium Italic */
+  @font-face {
+    font-family: 'TacticRoundExtExd';
+    src: url('./TacticRoundExtExd-MedIt.woff2') format('woff2');
+    font-weight: 500;
+    font-style: italic;
+    font-display: swap;
+  }
+  
+  /* TacticRound Extended Thin Italic */
+  @font-face {
+    font-family: 'TacticRoundExtExd';
+    src: url('./TacticRoundExtExd-ThnIt.woff2') format('woff2');
+    font-weight: 100;
+    font-style: italic;
+    font-display: swap;
+  }
+  
+  /* TacticRound Extended UltraLight Italic */
+  @font-face {
+    font-family: 'TacticRoundExtExd';
+    src: url('./TacticRoundExtExd-UltIt.woff2') format('woff2');
+    font-weight: 200;
+    font-style: italic;
+    font-display: swap;
+  }
+  

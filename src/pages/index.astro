@@ -7,6 +7,22 @@ type StarlightPageFrontmatter = any;
 
 console.log('pages/index.astro');
 
+function odmianaRoli(userRole) {
+  switch (userRole) {
+    case 'admin':
+      return 'admina';
+    case 'klient':
+      return 'klienta';
+    case 'spółka':
+      return 'spółkowicza';
+    case 'realizator':
+      return 'realizatora';
+    default:
+      return userRole; // Zwraca oryginalną wartość, jeśli nie pasuje do żadnego przypadku
+  }
+}
+
+
 let user;
 const token = Astro.cookies.get('token')?.value;
 // Sprawdź token w ciasteczku, jeśli user nie jest ustawiony
@@ -29,9 +45,11 @@ const userRole = user?.role || 'klient';
 console.log('pages/index.astro Userrole:', userRole);
 const dynamicSidebar = generateSidebar(userRole);
 
-const title = "title kurwa";
+const odmiana = odmianaRoli(userRole);
+
+const title = "Manual";
 const description = "Get started building your docs site with Starlight.";
-const tagline = "super kurwo";
+const tagline = `obsługi studia Flightcore dla ${odmiana}`;
 
 const logoutButton = user ? {
   text: "Wyloguj",
@@ -58,8 +76,8 @@ const frontmatter: StarlightPageFrontmatter = {
     actions: [
       logoutButton as any, // Ostatecznie wymuszenie zgodności typów
       {
-        text: "Przejdź do dokumentacji Flightcore",
-        link: "https://starlight.astro.build",
+        text: "Przejdź do strony Flightcore Studios",
+        link: "https://flightcore.pl",
         icon: "external"
       }
     ]
@@ -78,13 +96,13 @@ const frontmatter: StarlightPageFrontmatter = {
   <div id="content">
     {user ? (
       <div>
-        <h1>Welcome, {user.ksywa || user.username}!</h1>
-        <p>This is the more extensive version of the index page for logged-in users.</p>
+        <h1>Cześć, {user.ksywa || user.username}!</h1>
+        <p>Wybierz interesujący Cię temat lub skorzystaj z wyszukiwarki</p>
       </div>
     ) : (
       <div>
-        <h1>Welcome to the Index Page</h1>
-        <p>Please log in to see more content.</p>
+        <h1>To nasze kompendium wiedzy</h1>
+        <p>Wybierz interesujący Cię temat lub skorzystaj z wyszukiwarki</p>
       </div>
     )}
   </div>
@@ -167,8 +185,8 @@ const frontmatter: StarlightPageFrontmatter = {
       if (content) {
         content.innerHTML = `
           <div>
-            <h1>Welcome, ${user.ksywa || user.username}!</h1>
-            <p>This is the more extensive version of the index page for logged-in users.</p>
+            <h1>Cześć, ${user.ksywa || user.username}!</h1>
+            <p>Wybierz interesujący Cię temat lub skorzystaj z wyszukiwarki.</p>
           </div>
         `;
       }
