@@ -29,8 +29,8 @@ export const onRequest: MiddlewareHandler = async (context, next) => {
       context.cookies.set('userRole', user.role, {
         path: '/', 
         httpOnly: false, 
-        secure: false, 
-        sameSite: 'lax', // Zmieniono na 'lax' dla lepszej kompatybilności
+        secure: true, 
+        sameSite: 'none', // Zmieniono na 'lax' dla lepszej kompatybilności
       });
       console.log('Middleware: User role set to', user.role);
 
@@ -47,8 +47,8 @@ export const onRequest: MiddlewareHandler = async (context, next) => {
     context.cookies.set('userRole', 'klient', {
       path: '/', 
       httpOnly: false, 
-      secure: false, 
-      sameSite: 'lax', 
+      secure: true, 
+      sameSite: 'none', 
     });
   }
 

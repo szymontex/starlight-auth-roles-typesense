@@ -1,33 +1,7 @@
-console.log('utils/sidebarUtils.ts');
+import type { SidebarEntry } from '@astrojs/starlight/utils/navigation.ts'; // Upewnij się, że masz odpowiedni import
 
-export function generateSidebar(userRole: string) {
-  // const allSidebarItems = [
-  //   {
-  //     label: 'Admin Panel',
-  //     entries: [
-  //       { label: 'Admin test', href: '/admin/testowy' },
-  //     ],
-  //   },
-  //   {
-  //     label: 'Spółka',
-  //     entries: [
-  //       { label: 'Spółka Guide', href: '/spolka/testowy' },
-  //     ],
-  //   },
-  //   {
-  //     label: 'Realizator',
-  //     entries: [
-  //       { label: 'Realizator Guide', href: '/realizator/testowy' },
-  //     ],
-  //   },
-  //   {
-  //     label: 'Klient',
-  //     entries: [
-  //       { label: 'Klient Guide', href: '/klient/testowy' },
-  //     ],
-  //   },
-  // ];
-  const allSidebarItems = [
+export function generateSidebar(userRole: string): SidebarEntry[] {
+  const allSidebarItems: SidebarEntry[] = [
     {
       type: 'group',
       label: 'Admin',
@@ -93,21 +67,18 @@ export function generateSidebar(userRole: string) {
       badge: undefined
     },
   ];
+
   console.log('utils/sidebarUtils.ts UserRole:', userRole);
   switch (userRole) {
     case 'admin':
-      return allSidebarItems; // Zwraca wszystkie elementy
-
+      return allSidebarItems;
     case 'spolka':
-      return allSidebarItems.filter(item => item.label !== 'Admin'); // Zwraca wszystkie bez Admin
-
+      return allSidebarItems.filter(item => item.label !== 'Admin');
     case 'realizator':
-      return allSidebarItems.filter(item => item.label !== 'Admin' && item.label !== 'Spółka'); // Zwraca wszystkie bez Admin i Spółka
-
+      return allSidebarItems.filter(item => item.label !== 'Admin' && item.label !== 'Spółka');
     case 'klient':
-      return allSidebarItems.filter(item => item.label === 'Klient'); // Zwraca tylko Klient
-
+      return allSidebarItems.filter(item => item.label === 'Klient');
     default:
-      return []; // W razie gdyby userRole nie pasował do żadnego z powyższych
+      return [];
   }
 }

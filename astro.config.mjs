@@ -25,6 +25,7 @@ export default defineConfig({
       title: 'dupa psia',
       components: {
         Sidebar: './src/components/Sidebar.astro',
+        PageSidebar: './src/components/PageSidebar.astro',
         // Page: './src/components/CustomPage.astro',
       },
       defaultLocale: 'root',

@@ -16,7 +16,7 @@
     "@auth/core": "^0.34.2",
     "@types/cookie": "^0.6.0",
     "@types/jsonwebtoken": "^9.0.6",
-    "astro": "^4.14.3",
+    "astro": "^4.14.5",
     "bcryptjs": "^2.4.3",
     "cookie": "^0.6.0",
     "dotenv": "^16.4.5",
