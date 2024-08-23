@@ -19,11 +19,8 @@ pnpm-debug.log*
 
 # macOS-specific files
 .DS_Store
-2307.zip
-2407.zip
-2507.zip
 github
 github.pub
 obecny.zip
 pnpm-lock.yaml
-tak to.zip
+

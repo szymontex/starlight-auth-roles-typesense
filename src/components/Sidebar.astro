@@ -15,7 +15,7 @@ const dynamicSidebar = generateSidebar(userRole) || [];
 console.log('components/Sidebar.astro dynamicSidebar:', dynamicSidebar);
 console.log('components/Sidebar.astro Sidebar:', sidebar);
 
-if (!dynamicSidebar || dynamicSidebar.some(item => item === undefined || !item.entries)) {
+if (!dynamicSidebar || dynamicSidebar.some(item => item === undefined || (item.type === 'group' && !item.entries))) {
   console.error('Invalid dynamicSidebar structure detected:', dynamicSidebar);
 }
 ---

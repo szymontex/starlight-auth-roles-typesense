@@ -1,36 +1,12 @@
-console.log('utils/sidebarUtils.ts');
+import type { SidebarEntry } from 'C:/IT/astro/starlight/flightstarlight/node_modules/@astrojs/starlight/utils/navigation.ts';
 
-export function generateSidebar(userRole: string) {
-  // const allSidebarItems = [
-  //   {
-  //     label: 'Admin Panel',
-  //     entries: [
-  //       { label: 'Admin test', href: '/admin/testowy' },
-  //     ],
-  //   },
-  //   {
-  //     label: 'Spółka',
-  //     entries: [
-  //       { label: 'Spółka Guide', href: '/spolka/testowy' },
-  //     ],
-  //   },
-  //   {
-  //     label: 'Realizator',
-  //     entries: [
-  //       { label: 'Realizator Guide', href: '/realizator/testowy' },
-  //     ],
-  //   },
-  //   {
-  //     label: 'Klient',
-  //     entries: [
-  //       { label: 'Klient Guide', href: '/klient/testowy' },
-  //     ],
-  //   },
-  // ];
-  const allSidebarItems = [
+export function generateSidebar(userRole: string): SidebarEntry[] {
+  const allSidebarItems: SidebarEntry[] = [
     {
       type: 'group',
       label: 'Admin',
+      collapsed: false,
+      badge: undefined,
       entries: [
         {
           type: 'link',
@@ -38,7 +14,9 @@ export function generateSidebar(userRole: string) {
           href: '/admin/testowy',
           isCurrent: false,
           badge: undefined,
-          attrs: {}
+          attrs: {
+            class: 'some-class',
+          },
         },
         {
           type: 'link',
@@ -46,15 +24,17 @@ export function generateSidebar(userRole: string) {
           href: '/admin/testowycopy',
           isCurrent: false,
           badge: undefined,
-          attrs: {}
-        }
+          attrs: {
+            class: 'some-class',
+          },
+        },
       ],
-      collapsed: false,
-      badge: undefined
     },
     {
       type: 'group',
       label: 'Spółka',
+      collapsed: false,
+      badge: undefined,
       entries: [
         {
           type: 'link',
@@ -62,15 +42,17 @@ export function generateSidebar(userRole: string) {
           href: '/spolka/testowy',
           isCurrent: false,
           badge: undefined,
-          attrs: {}
-        }
+          attrs: {
+            class: 'some-class',
+          },
+        },
       ],
-      collapsed: false,
-      badge: undefined
     },
     {
       type: 'group',
       label: 'Realizator',
+      collapsed: false,
+      badge: undefined,
       entries: [
         {
           type: 'link',
@@ -78,15 +60,17 @@ export function generateSidebar(userRole: string) {
           href: '/realizator/testowy',
           isCurrent: false,
           badge: undefined,
-          attrs: {}
-        }
+          attrs: {
+            class: 'some-class',
+          },
+        },
       ],
-      collapsed: false,
-      badge: undefined
     },
     {
       type: 'group',
       label: 'Klient',
+      collapsed: false,
+      badge: undefined,
       entries: [
         {
           type: 'link',
@@ -94,7 +78,9 @@ export function generateSidebar(userRole: string) {
           href: '/klient/testowy',
           isCurrent: false,
           badge: undefined,
-          attrs: {}
+          attrs: {
+            class: 'some-class',
+          },
         },
         {
           type: 'link',
@@ -102,28 +88,30 @@ export function generateSidebar(userRole: string) {
           href: '/klient/testowycopy',
           isCurrent: false,
           badge: undefined,
-          attrs: {}
-        }
+          attrs: {
+            class: 'some-class',
+          },
+        },
       ],
-      collapsed: false,
-      badge: undefined
     },
   ];
+
   console.log('utils/sidebarUtils.ts UserRole:', userRole);
+  
   switch (userRole) {
     case 'admin':
-      return allSidebarItems; // Zwraca wszystkie elementy
+      return allSidebarItems; // Return all items
 
     case 'spolka':
-      return allSidebarItems.filter(item => item.label !== 'Admin'); // Zwraca wszystkie bez Admin
+      return allSidebarItems.filter(item => item.label !== 'Admin'); // Return all except Admin
 
     case 'realizator':
-      return allSidebarItems.filter(item => item.label !== 'Admin' && item.label !== 'Spółka'); // Zwraca wszystkie bez Admin i Spółka
+      return allSidebarItems.filter(item => item.label !== 'Admin' && item.label !== 'Spółka'); // Return all except Admin and Spółka
 
     case 'klient':
-      return allSidebarItems.filter(item => item.label === 'Klient'); // Zwraca tylko Klient
+      return allSidebarItems.filter(item => item.label === 'Klient'); // Return only Klient
 
     default:
-      return []; // W razie gdyby userRole nie pasował do żadnego z powyższych
+      return []; // Return empty array if userRole doesn't match any case
   }
 }

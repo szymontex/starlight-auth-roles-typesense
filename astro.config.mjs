@@ -25,6 +25,7 @@ export default defineConfig({
       title: 'Docs',
       description: 'Dokumentacja obslugi studia Flightcore',
       prerender: false,
+      // pagefind: true,
       logo: {
         src: './src/assets/flightcore.svg',
         

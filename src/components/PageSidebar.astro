@@ -3,10 +3,11 @@ import type { Props } from '@astrojs/starlight/props';
 
 import MobileTableOfContents from '@astrojs/starlight/components/MobileTableOfContents.astro';
 import TableOfContents from '@astrojs/starlight/components/TableOfContents.astro';
-import { generateSidebar } from '../utils/sidebarUtils'; // Import funkcji generateSidebar
+import { generateSidebar } from '../utils/sidebarUtils';
+import type { SidebarEntry } from 'C:/IT/astro/starlight/flightstarlight/node_modules/@astrojs/starlight/utils/navigation.ts';
 
 const userRole = Astro.cookies.get('userRole')?.value || 'klient';
-const dynamicSidebar = generateSidebar(userRole) || []; // Generowanie dynamicSidebar
+const dynamicSidebar: SidebarEntry[] = generateSidebar(userRole) || [];
 ---
 
 {
@@ -20,17 +21,22 @@ const dynamicSidebar = generateSidebar(userRole) || []; // Generowanie dynamicSi
 					<TableOfContents {...Astro.props} />
 					{dynamicSidebar.length > 0 && (
 						<nav class="dynamic-sidebar">
-							{/* Render dynamicznego sidebaru */}
-							{dynamicSidebar.map(group => (
+							{dynamicSidebar.map((group) => (
 								<div>
 									<h2>{group.label}</h2>
-									<ul>
-										{group.entries.map(entry => (
-											<li>
-												<a href={entry.href}>{entry.label}</a>
-											</li>
-										))}
-									</ul>
+									{group.type === 'group' && group.entries && (
+										<ul>
+											{group.entries.map((entry) => (
+												<li>
+													{entry.type === 'link' ? (
+														<a href={entry.href}>{entry.label}</a>
+													) : (
+														<span>{entry.label}</span>
+													)}
+												</li>
+											))}
+										</ul>
+									)}
 								</div>
 							))}
 						</nav>
@@ -70,9 +76,9 @@ const dynamicSidebar = generateSidebar(userRole) || []; // Generowanie dynamicSi
 			max-width: calc(
 				(
 					(
-							100vw - var(--sl-sidebar-width) - 2 * var(--sl-content-pad-x) - 2 *
-								var(--sl-sidebar-pad-x)
-						) * 0.25 /* MAGIC NUMBER 🥲 */
+						100vw - var(--sl-sidebar-width) - 2 * var(--sl-content-pad-x) - 2 *
+						var(--sl-sidebar-pad-x)
+					) * 0.25
 				)
 			);
 		}
