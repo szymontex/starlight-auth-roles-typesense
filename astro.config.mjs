@@ -33,7 +33,7 @@ export default defineConfig({
       // pagefind: true,
       logo: {
         src: './src/assets/flightcore.svg',
-        
+      favicon: '/favicon.svg',  
       },
       customCss: [
         // Relative path to your custom CSS file

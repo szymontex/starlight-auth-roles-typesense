@@ -20,9 +20,9 @@ export const POST: APIRoute = async ({ request, cookies }) => {
         
         cookies.set('token', token, {
           path: '/',
-          httpOnly: true,
-          secure: true,
-          sameSite: 'strict',
+          httpOnly: false, // Zmień na false, aby ciasteczko było dostępne przez JavaScript
+          secure: false, // Tymczasowo ustaw na false, jeśli nie używasz HTTPS
+          sameSite: 'lax',
           maxAge: 60 * 60 // 1 hour
         });
         
