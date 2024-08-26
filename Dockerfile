@@ -1,11 +1,14 @@
 # Stage 1: Build stage
 FROM node:18-alpine AS builder
 
-# Set PYTHONIOENCODING
+# Set environment variables for UTF-8 support
+ENV LANG=C.UTF-8
+ENV LC_ALL=C.UTF-8
 ENV PYTHONIOENCODING=utf-8
 
-# Install pnpm using npm
-RUN npm install -g pnpm
+# Install pnpm and other necessary tools
+RUN apk add --no-cache python3 make g++ && \
+    npm install -g pnpm
 
 # Set working directory
 WORKDIR /app
@@ -33,7 +36,12 @@ RUN pnpm build
 # Stage 2: Production stage
 FROM node:18-alpine AS production
 
-# Install pnpm using npm
+# Set environment variables for UTF-8 support
+ENV LANG=C.UTF-8
+ENV LC_ALL=C.UTF-8
+ENV PYTHONIOENCODING=utf-8
+
+# Install pnpm
 RUN npm install -g pnpm
 
 # Set working directory

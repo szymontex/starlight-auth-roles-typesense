@@ -14,5 +14,8 @@ services:
       - DB_PASSWORD=${DB_PASSWORD}
       - DB_NAME=${DB_NAME}
       - AUTH_SECRET=${AUTH_SECRET}
+      - LANG=C.UTF-8
+      - LC_ALL=C.UTF-8
+      - PYTHONIOENCODING=utf-8
     command: pnpm start
     network_mode: bridge
