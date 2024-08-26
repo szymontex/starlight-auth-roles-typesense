@@ -1,6 +1,9 @@
 # Stage 1: Build stage
 FROM node:18-alpine AS builder
 
+# Set PYTHONIOENCODING
+ENV PYTHONIOENCODING=utf-8
+
 # Install pnpm using npm
 RUN npm install -g pnpm
 
