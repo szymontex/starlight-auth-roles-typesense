@@ -51,17 +51,17 @@ console.log('pages/login.astro');
 
             if (response.ok) {
                 const data = await response.json();
-                console.log('pages/login.astro Login successful, received data:', data);
                 localStorage.setItem('token', data.token);
+                console.log('Token saved to localStorage:', data.token);
+                // Ustawienie tokenu w ciasteczku po stronie klienta
                 document.cookie = `token=${data.token}; path=/; max-age=3600; SameSite=Lax; Secure`;
-                console.log('pages/login.astro Token set in localStorage and cookie');
-                  // Dodaj token do nagłówka Authorization
+                console.log('Token set as cookie');
+
+                // Dodanie tokenu do nagłówka Authorization dla przyszłych żądań
                 const newHeaders = new Headers(response.headers);
                 newHeaders.set('Authorization', `Bearer ${data.token}`);
-                
-                console.log('pages/login.astro Login successful, token set');
                 window.location.href = '/';
-            } else {
+              } else {
                 const error = await response.text();
                 const errorElement = document.getElementById('error');
                 if (errorElement) {

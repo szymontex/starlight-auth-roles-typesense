@@ -14,8 +14,12 @@ export const onRequest: MiddlewareHandler = async ({ request, cookies, url, loca
   let userRole = 'klient';
 
   // Pobierz token z ciasteczka lub nagłówka Authorization
-  const token = cookies.get('token')?.value || request.headers.get('Authorization')?.split(' ')[1];
+  let token = cookies.get('token')?.value || request.headers.get('Authorization')?.split(' ')[1];
   console.log('Middleware: Token:', token);
+
+
+  console.log('Middleware: All cookies:', request.headers.get('cookie'));
+
 
   if (token) {
     try {
@@ -35,6 +39,8 @@ export const onRequest: MiddlewareHandler = async ({ request, cookies, url, loca
       console.error('Middleware: Invalid token:', error);
       cookies.delete('token', { path: '/' });
       cookies.delete('userRole', { path: '/' });
+      token = undefined;
+      userRole = 'klient';
     }
   } else {
     console.log('Middleware: No token found, setting userRole to klient');
@@ -49,6 +55,7 @@ export const onRequest: MiddlewareHandler = async ({ request, cookies, url, loca
   console.log('Middleware: userRole cookie after processing:', cookies.get('userRole')?.value);
   console.log('Middleware: Checking access for path:', url.pathname, 'with userRole:', userRole);
 
+  
   // Logika autoryzacji dostępu na podstawie roli użytkownika
   const accessRules = {
     '/admin': ['admin'],
@@ -68,6 +75,6 @@ export const onRequest: MiddlewareHandler = async ({ request, cookies, url, loca
 
   const response = await next();
   console.log('Middleware: Response status:', response.status);
-
+  console.log('Middleware: Response headers:', Object.fromEntries(response.headers.entries()));
   return response;
 };
