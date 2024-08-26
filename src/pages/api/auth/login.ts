@@ -20,14 +20,14 @@ export const POST: APIRoute = async ({ request, cookies }) => {
         
         cookies.set('token', token, {
           path: '/',
-          httpOnly: true,
-          secure: true,
+          httpOnly: false, // Zmień na false, aby ciasteczko było dostępne przez JavaScript
+          secure: process.env.NODE_ENV === 'production', // Ustaw na true tylko w produkcji
           sameSite: 'lax',
           maxAge: 60 * 60 // 1 hour
         });
         
         console.log('pages/api/auth/login.ts Cookie set:', cookies.get('token'));
-        
+
         resolve(new Response(JSON.stringify({ token, role: user.uprawnienia }), {
           status: 200,
           headers: {
