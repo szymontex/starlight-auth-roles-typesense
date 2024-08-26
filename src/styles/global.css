@@ -1,6 +1,7 @@
 /* Możesz usunąć lub zakomentować te style, jeśli chcesz zachować domyślny wygląd Starlight */
 
 
+
 /* Dark mode colors. */
 :root {
   --sl-content-width: 55rem;
@@ -58,8 +59,15 @@ p, li, a {
 
 
 /* Te klasy są opcjonalne, możesz je dostosować lub rozszerzyć według potrzeb. */
+.login-page {
+  background-color: var(--sl-color-black);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  margin: 0;
+}
 
-/* Stylizowanie kart i przycisków */
 .login-card {
   background-color: var(--sl-color-gray-6);
   border-radius: var(--border-radius, 0.5rem);
@@ -68,20 +76,22 @@ p, li, a {
   max-width: 400px;
   width: 100%;
   color: var(--sl-color-white);
+  box-sizing: border-box;
+  font-family: var(--sl-font-regular); /* Użycie globalnie zdefiniowanej czcionki */
 }
 
 .login-card h1 {
   margin-bottom: 1.5rem;
   font-size: 1.5rem;
   text-align: center;
-  color: var(--sl-color-white);
+  font-family: var(--sl-font-bold); /* Użycie globalnie zdefiniowanej czcionki */
 }
 
 .login-card label {
+  font-family: var(--sl-font-medium); /* Użycie globalnie zdefiniowanej czcionki */
   font-weight: 500;
   margin-bottom: 0.5rem;
   display: block;
-  color: var(--sl-color-white);
 }
 
 .login-card input[type="text"],

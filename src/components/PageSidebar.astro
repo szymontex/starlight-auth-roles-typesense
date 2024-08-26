@@ -1,13 +1,12 @@
 ---
 import type { Props } from '@astrojs/starlight/props';
-
 import MobileTableOfContents from '@astrojs/starlight/components/MobileTableOfContents.astro';
 import TableOfContents from '@astrojs/starlight/components/TableOfContents.astro';
-import { generateSidebar } from '../utils/sidebarUtils';
-import type { SidebarEntry } from 'C:/IT/vercel/flightstarlight2/node_modules/@astrojs/starlight/utils/navigation.ts';
+import { generateSidebar, convertToSidebarEntry } from '../utils/sidebarUtils';
+import type { SidebarEntry } from '../../node_modules/@astrojs/starlight/utils/navigation';
 
 const userRole = Astro.cookies.get('userRole')?.value || 'klient';
-const dynamicSidebar: SidebarEntry[] = generateSidebar(userRole) || [];
+const dynamicSidebar: SidebarEntry[] = convertToSidebarEntry(generateSidebar(userRole));
 ---
 
 {

@@ -2,7 +2,7 @@
 import type { Props } from '@astrojs/starlight/props'
 import StarlightPage from '@astrojs/starlight/components/StarlightPage.astro'
 import { verifyToken } from '../lib/auth';
-import { generateSidebar } from '../utils/sidebarUtils';
+import { generateSidebar, convertToStarlightSidebar } from '../utils/sidebarUtils';
 type StarlightPageFrontmatter = any;
 
 console.log('pages/index.astro');
@@ -44,6 +44,7 @@ if (user) {
 const userRole = user?.role || 'klient';
 console.log('pages/index.astro Userrole:', userRole);
 const dynamicSidebar = generateSidebar(userRole);
+const starlightSidebar = convertToStarlightSidebar(dynamicSidebar);
 
 const odmiana = odmianaRoli(userRole);
 
@@ -89,23 +90,8 @@ const frontmatter: StarlightPageFrontmatter = {
 <StarlightPage
   frontmatter={frontmatter}
   hasSidebar={true}
-  sidebar={dynamicSidebar}
+  sidebar={starlightSidebar}
   >
-
-  
-  <div id="content">
-    {user ? (
-      <div>
-        <h1>Cześć, {user.ksywa || user.username}!</h1>
-        <p>Wybierz interesujący Cię temat lub skorzystaj z wyszukiwarki</p>
-      </div>
-    ) : (
-      <div>
-        <h1>To nasze kompendium wiedzy</h1>
-        <p>Wybierz interesujący Cię temat lub skorzystaj z wyszukiwarki</p>
-      </div>
-    )}
-  </div>
 </StarlightPage>
 
 <script>

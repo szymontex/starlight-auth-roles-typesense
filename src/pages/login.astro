@@ -1,29 +1,20 @@
 ---
+import Layout from '../layouts/Layout.astro';
+
 const userRole = Astro.cookies.get('userRole')?.value;
 if (userRole && userRole !== 'klient') {
   return Astro.redirect('/');
 }
 console.log('pages/login.astro');
 ---
-
-<html>
-  <head>
-    <title>Login</title>
-    <link rel="stylesheet" href="/src/styles/global.css">
-    <style>
-      body {
-        background-color: var(--sl-color-black);
-        font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        height: 100vh;
-        margin: 0;
-        color: var(--sl-color-white);
-      }
-    </style>
-  </head>
-  <body>
+<style>html, body, main {  
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  height: 100%;
+}</style>
+<Layout title="Login">
+  <div class="login-page">
     <div class="login-card">
       <h1>Login</h1>
       <form id="login-form">
@@ -39,9 +30,10 @@ console.log('pages/login.astro');
         <button type="submit">Login</button>
       </form>
     </div>
+  </div>
 
-    <script>
-        async function handleSubmit(event: Event) {
+  <script>
+    async function handleSubmit(event: Event) {
         event.preventDefault();
         const form = event.target as HTMLFormElement;
         const formData = new FormData(form);
@@ -49,43 +41,40 @@ console.log('pages/login.astro');
         const password = formData.get('password');
 
         try {
-          const response = await fetch('/api/auth/login', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ username, password }),
-          });
+            const response = await fetch('/api/auth/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ username, password }),
+            });
 
-          if (response.ok) {
-            const data = await response.json();
-            console.log('pages/login.astro Received token:', data.token);
-            localStorage.setItem('token', data.token);
-            document.cookie = `token=${data.token}; path=/; max-age=3600; SameSite=Lax; Secure`;
-            console.log('pages/login.astro Token saved to localStorage and cookie');
-            window.location.href = '/';
-          } else {
-            const error = await response.text();
+            if (response.ok) {
+                const data = await response.json();
+                localStorage.setItem('token', data.token);
+                document.cookie = `token=${data.token}; path=/; max-age=3600; SameSite=Lax; Secure`;
+                window.location.href = '/';
+            } else {
+                const error = await response.text();
+                const errorElement = document.getElementById('error');
+                if (errorElement) {
+                    errorElement.textContent = error;
+                }
+            }
+        } catch (error) {
             const errorElement = document.getElementById('error');
             if (errorElement) {
-              errorElement.textContent = error;
+                errorElement.textContent = 'Something went wrong';
             }
-          }
-        } catch (error) {
-          const errorElement = document.getElementById('error');
-          if (errorElement) {
-            errorElement.textContent = 'Something went wrong';
-          }
-          console.error('pages/login.astro Error during login:', error);
+            console.error('Error during login:', error);
         }
-      }
+    }
 
-      const form = document.getElementById('login-form');
-      if (form) {
+    const form = document.getElementById('login-form');
+    if (form) {
         form.addEventListener('submit', handleSubmit);
-      } else {
+    } else {
         console.error('Login form not found');
-      }
-    </script>
-  </body>
-</html>
+    }
+</script>
+</Layout>

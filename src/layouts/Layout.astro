@@ -1,4 +1,5 @@
 ---
+import '../fonts/font-face.css';  // Import czcionek jako pierwszy
 import '../styles/global.css';
 console.log('layouts/Layout.astro');
 ---
@@ -9,7 +10,7 @@ console.log('layouts/Layout.astro');
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width" />
     <meta name="generator" content={Astro.generator} />
-    <title>Your Site Title</title>
+    <title>{Astro.props.title || "Your Site Title"}</title>
   </head>
   <body>
     <slot />

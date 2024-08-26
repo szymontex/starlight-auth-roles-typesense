@@ -1,5 +1,4 @@
-import type { SidebarEntry } from 'C:/IT/vercel/flightstarlight2/node_modules/@astrojs/starlight/utils/navigation.ts';
-
+import type { SidebarEntry } from '../../node_modules/@astrojs/starlight/utils/navigation';
 type StarlightSidebarItem = { label: string; items: { label: string; link: string }[] };
 
 export function generateSidebar(userRole: string): StarlightSidebarItem[] {
@@ -53,6 +52,31 @@ export function generateSidebar(userRole: string): StarlightSidebarItem[] {
       filteredSidebar = [];
   }
 
-  // Zawsze zwracaj tablicę z co najmniej jednym elementem
   return filteredSidebar.length > 0 ? filteredSidebar : [{ label: 'Menu', items: [] }];
+}
+export function convertToSidebarEntry(items: StarlightSidebarItem[]): SidebarEntry[] {
+  return items.map(group => ({
+    type: 'group',
+    label: group.label,
+    entries: group.items.map(item => ({
+      type: 'link',
+      label: item.label,
+      href: item.link,
+      isCurrent: false,
+      badge: undefined,
+      attrs: {}
+    })),
+    collapsed: false,
+    badge: undefined
+  }));
+}
+// Dodaj nową funkcję konwertującą
+export function convertToStarlightSidebar(sidebar: StarlightSidebarItem[]): any[] {
+  return sidebar.map(group => ({
+    label: group.label,
+    items: group.items.map(item => ({
+      label: item.label,
+      link: item.link
+    }))
+  }));
 }
