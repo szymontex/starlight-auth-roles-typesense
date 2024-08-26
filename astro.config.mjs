@@ -9,6 +9,10 @@ export default defineConfig({
   adapter: node({
     mode: 'standalone', // Ustawienie wymaganego trybu działania
   }),
+  server: {
+    host: '0.0.0.0',
+    port: 4321
+  },
   // experimental: {
   //   
   // },

@@ -1,6 +1,5 @@
 # Wyklucz node_modules (będziemy je instalować wewnątrz kontenera)
 node_modules
-pnpm-lock.yaml
 
 # Wyklucz pliki tymczasowe i logi
 *.log

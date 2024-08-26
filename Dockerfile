@@ -1,42 +1,38 @@
-# Etap 1: Budowanie aplikacji
+# Stage 1: Build stage
 FROM node:18-alpine AS builder
 
-# Instalacja pnpm globalnie
+# Install pnpm using npm
 RUN npm install -g pnpm
 
-# Ustawienie katalogu roboczego
+# Set working directory
 WORKDIR /app
 
-# Skopiowanie plików konfiguracyjnych pnpm i pliku package.json
+# Copy package.json and pnpm-lock.yaml to install dependencies
 COPY package.json pnpm-lock.yaml ./
 
-# Instalacja zależności produkcyjnych
+# Install dependencies
 RUN pnpm install --frozen-lockfile
 
-# Skopiowanie reszty kodu źródłowego
+# Copy the rest of the application code
 COPY . .
 
-# Budowanie aplikacji Astro
+# Build the application
 RUN pnpm build
 
-# Etap 2: Uruchomienie aplikacji
-FROM node:18-alpine
+# Stage 2: Production stage
+FROM node:18-alpine AS production
 
-# Instalacja pnpm globalnie
+# Install pnpm using npm
 RUN npm install -g pnpm
 
-# Ustawienie katalogu roboczego
+# Set working directory
 WORKDIR /app
 
-# Skopiowanie zależności produkcyjnych z etapu budowania
-COPY --from=builder /app/package.json /app/pnpm-lock.yaml ./
-RUN pnpm install --prod --frozen-lockfile
+# Copy the built application from the builder stage
+COPY --from=builder /app /app
 
-# Skopiowanie zbudowanej aplikacji z etapu budowania
-COPY --from=builder /app/dist ./dist
+# Expose the port
+EXPOSE 26396
 
-# Eksponowanie portu aplikacji
-EXPOSE 3000
-
-# Domyślna komenda uruchamiająca aplikację
-CMD ["node", "./dist/server/entry.mjs"]
+# Start the application
+CMD ["pnpm", "start"]

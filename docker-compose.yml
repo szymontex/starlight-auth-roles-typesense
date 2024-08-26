@@ -6,7 +6,5 @@ services:
       context: .
       dockerfile: Dockerfile
     ports:
-      - '26396:3000'
-    environment:
-      NODE_ENV: production
-    restart: unless-stopped
+      - "26396:4321"
+    command: pnpm start
