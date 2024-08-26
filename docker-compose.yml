@@ -7,4 +7,11 @@ services:
       dockerfile: Dockerfile
     ports:
       - "26396:4321"
+    environment:
+      - DB_HOST=${DB_HOST}
+      - DB_PORT=${DB_PORT}
+      - DB_USER=${DB_USER}
+      - DB_PASSWORD=${DB_PASSWORD}
+      - DB_NAME=${DB_NAME}
+      - AUTH_SECRET=${AUTH_SECRET}
     command: pnpm start
