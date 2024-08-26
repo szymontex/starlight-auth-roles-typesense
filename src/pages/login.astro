@@ -55,6 +55,11 @@ console.log('pages/login.astro');
                 localStorage.setItem('token', data.token);
                 document.cookie = `token=${data.token}; path=/; max-age=3600; SameSite=Lax; Secure`;
                 console.log('pages/login.astro Token set in localStorage and cookie');
+                  // Dodaj token do nagłówka Authorization
+                const newHeaders = new Headers(response.headers);
+                newHeaders.set('Authorization', `Bearer ${data.token}`);
+                
+                console.log('pages/login.astro Login successful, token set');
                 window.location.href = '/';
             } else {
                 const error = await response.text();
@@ -76,7 +81,7 @@ console.log('pages/login.astro');
     if (form) {
         form.addEventListener('submit', handleSubmit);
     } else {
-        console.error('pages/login.astro Login form not found');
+        console.error('pages/login.astroLogin form not found');
     }
 </script>
 </Layout>

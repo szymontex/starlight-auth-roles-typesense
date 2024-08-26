@@ -68,7 +68,11 @@ passport.use(new LocalStrategy(
 ));
 
 const opts = {
-  jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+  jwtFromRequest: ExtractJwt.fromExtractors([
+    ExtractJwt.fromAuthHeaderAsBearerToken(),
+    ExtractJwt.fromUrlQueryParameter('token'),
+    (req) => req.cookies?.token
+  ]),
   secretOrKey: secret
 };
 
