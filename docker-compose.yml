@@ -15,3 +15,4 @@ services:
       - DB_NAME=${DB_NAME}
       - AUTH_SECRET=${AUTH_SECRET}
     command: pnpm start
+    network_mode: bridge
