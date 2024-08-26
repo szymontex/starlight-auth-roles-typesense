@@ -16,6 +16,7 @@ export const POST: APIRoute = async ({ request, cookies }) => {
       } else {
         const token = generateToken(user);
         console.log('pages/api/auth/login.ts User authenticated successfully:', user);
+        console.log('pages/api/auth/login.ts Generated token:', token);
         
         cookies.set('token', token, {
           path: '/',
@@ -24,7 +25,9 @@ export const POST: APIRoute = async ({ request, cookies }) => {
           sameSite: 'lax',
           maxAge: 60 * 60 // 1 hour
         });
-
+        
+        console.log('pages/api/auth/login.ts Cookie set:', cookies.get('token'));
+        
         resolve(new Response(JSON.stringify({ token, role: user.uprawnienia }), {
           status: 200,
           headers: {

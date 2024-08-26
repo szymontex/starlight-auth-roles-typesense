@@ -51,8 +51,10 @@ console.log('pages/login.astro');
 
             if (response.ok) {
                 const data = await response.json();
+                console.log('pages/login.astro Login successful, received data:', data);
                 localStorage.setItem('token', data.token);
                 document.cookie = `token=${data.token}; path=/; max-age=3600; SameSite=Lax; Secure`;
+                console.log('pages/login.astro Token set in localStorage and cookie');
                 window.location.href = '/';
             } else {
                 const error = await response.text();
@@ -66,7 +68,7 @@ console.log('pages/login.astro');
             if (errorElement) {
                 errorElement.textContent = 'Something went wrong';
             }
-            console.error('Error during login:', error);
+            console.error('pages/login.astro Error during login:', error);
         }
     }
 
@@ -74,7 +76,7 @@ console.log('pages/login.astro');
     if (form) {
         form.addEventListener('submit', handleSubmit);
     } else {
-        console.error('Login form not found');
+        console.error('pages/login.astro Login form not found');
     }
 </script>
 </Layout>

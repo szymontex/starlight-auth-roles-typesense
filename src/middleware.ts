@@ -17,6 +17,7 @@ export const onRequest: MiddlewareHandler = async (context, next) => {
 
   // Pobierz token z ciasteczka
   const token = cookies.get("token")?.value;
+  console.log('Middleware: Token from cookie:', token);
 
   if (token) {
     console.log('Middleware: Token found:', token);

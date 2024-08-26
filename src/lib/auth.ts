@@ -27,6 +27,12 @@ const db = mysql.createPool({
   database: requiredEnv('DB_NAME'),
 });
 
+console.log('lib/auth.ts Environment variables:');
+console.log('lib/auth.ts DB_HOST:', process.env.DB_HOST);
+console.log('lib/auth.ts DB_PORT:', process.env.DB_PORT);
+console.log('lib/auth.ts DB_USER:', process.env.DB_USER);
+console.log('lib/auth.ts DB_NAME:', process.env.DB_NAME);
+console.log('lib/auth.ts AUTH_SECRET:', process.env.AUTH_SECRET ? 'Set' : 'Not set');
 // Typy danych użytkownika oraz wyników zapytania
 interface UserRow extends RowDataPacket {
   id: number;
