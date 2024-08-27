@@ -27,7 +27,7 @@ export function generateSidebar(userRole: string): StarlightSidebarItem[] {
       items: [
         { label: 'mozliwosci markdown', link: '/klient/testowy' },
         { label: 'Klient Guide', link: '/klient/testowycopy' },
-        { label: 'google docs test', link: '/klient/docs test' },
+        { label: 'google docs test', link: '/klient/docs_test' },
       ],
     },
   ];
