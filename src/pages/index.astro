@@ -2,7 +2,7 @@
 import type { Props } from '@astrojs/starlight/props'
 import StarlightPage from '@astrojs/starlight/components/StarlightPage.astro'
 import { verifyToken } from '../lib/auth';
-import { generateSidebar, convertToSidebarEntry } from '../utils/sidebarUtils';
+import { generateSidebar, convertToStarlightSidebar } from '../utils/sidebarUtils';
 type StarlightPageFrontmatter = any;
 
 console.log('pages/index.astro');
@@ -44,7 +44,7 @@ if (user) {
 const userRole = user?.role || 'klient';
 console.log('pages/index.astro Userrole:', userRole);
 const dynamicSidebar = generateSidebar(userRole);
-const starlightSidebar = convertToSidebarEntry(dynamicSidebar);
+const starlightSidebar = convertToStarlightSidebar(dynamicSidebar);
 
 const odmiana = odmianaRoli(userRole);
 
