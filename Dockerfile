@@ -1,5 +1,5 @@
 # Stage 1: Build stage
-FROM node:18-alpine AS builder
+FROM node:22.7.0-alpine AS builder
 
 # Set environment variables for UTF-8 support
 ENV LANG=C.UTF-8
@@ -8,7 +8,7 @@ ENV PYTHONIOENCODING=utf-8
 
 # Install pnpm and other necessary tools
 RUN apk add --no-cache python3 make g++ && \
-    npm install -g pnpm
+    npm install -g pnpm@9.8.0
 
 # Set working directory
 WORKDIR /app
@@ -18,7 +18,7 @@ COPY package.json* pnpm-lock.yaml* ./
 RUN if [ ! -f package.json ]; then echo '{}' > package.json; fi
 RUN if [ ! -f pnpm-lock.yaml ]; then touch pnpm-lock.yaml; fi
 
-# Remove existing node_modules and pnpm-lock.yaml
+# Remove any existing node_modules, pnpm-lock.yaml and clean the pnpm store
 RUN rm -rf node_modules pnpm-lock.yaml
 
 # Install dependencies if package.json exists, forcing a fresh installation
@@ -39,7 +39,7 @@ RUN echo "DB_HOST=$DB_HOST" >> .env && \
 RUN if grep -q '"build"' package.json; then pnpm build; fi
 
 # Stage 2: Production stage
-FROM node:18-alpine AS production
+FROM node:22.7.0-alpine AS production
 
 # Set environment variables for UTF-8 support
 ENV LANG=C.UTF-8
@@ -47,7 +47,7 @@ ENV LC_ALL=C.UTF-8
 ENV PYTHONIOENCODING=utf-8
 
 # Install pnpm
-RUN npm install -g pnpm
+RUN npm install -g pnpm@9.8.0
 
 # Set working directory
 WORKDIR /app
