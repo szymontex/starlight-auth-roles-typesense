@@ -19,7 +19,7 @@ RUN if [ ! -f package.json ]; then echo '{}' > package.json; fi
 RUN if [ ! -f pnpm-lock.yaml ]; then touch pnpm-lock.yaml; fi
 
 # Install dependencies if package.json exists
-RUN if [ -s package.json ]; then pnpm install --frozen-lockfile; fi
+RUN if [ -s package.json ]; then pnpm install --lockfile-only; pnpm install; fi
 
 # Copy the rest of the application code
 COPY . .
