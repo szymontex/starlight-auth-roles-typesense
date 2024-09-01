@@ -13,12 +13,13 @@ RUN apk add --no-cache python3 make g++ && \
 # Set working directory
 WORKDIR /app
 
-# Copy package.json if it exists, otherwise create an empty one
-COPY package.json* ./
+# Copy package.json and pnpm-lock.yaml if they exist, otherwise create empty ones
+COPY package.json* pnpm-lock.yaml* ./
 RUN if [ ! -f package.json ]; then echo '{}' > package.json; fi
+RUN if [ ! -f pnpm-lock.yaml ]; then touch pnpm-lock.yaml; fi
 
-# Remove any existing node_modules and pnpm-lock.yaml if they exist, and clean the pnpm store if it exists
-RUN [ -d "/root/.local/share/pnpm/store" ] && pnpm store prune || echo "No pnpm store to prune" && rm -rf node_modules pnpm-lock.yaml
+# Remove existing node_modules and pnpm-lock.yaml
+RUN rm -rf node_modules pnpm-lock.yaml
 
 # Install dependencies if package.json exists, forcing a fresh installation
 RUN if [ -s package.json ]; then pnpm install --force; fi
