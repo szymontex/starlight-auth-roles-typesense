@@ -8,7 +8,7 @@ ENV PYTHONIOENCODING=utf-8
 
 # Install pnpm and other necessary tools
 RUN apk add --no-cache python3 make g++ && \
-    npm install -g pnpm@9.8.0
+    npm install -g pnpm
 
 # Set working directory
 WORKDIR /app
