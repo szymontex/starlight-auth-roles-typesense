@@ -5,8 +5,6 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-      args:
-        - BUILDKIT_PROGRESS=plain
     ports:
       - "26396:4321"
     environment:
@@ -21,16 +19,3 @@ services:
       - PYTHONIOENCODING=utf-8
     command: pnpm start
     network_mode: bridge
-
-x-build-options: &build-options
-  context: .
-  dockerfile: Dockerfile
-  args:
-    BUILDKIT_PROGRESS: plain
-  x-bake:
-    platforms:
-      - linux/amd64
-    cache-from:
-      - type=local,src=/tmp/.buildx-cache
-    cache-to:
-      - type=local,dest=/tmp/.buildx-cache-new,mode=max
