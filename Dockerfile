@@ -18,7 +18,7 @@ COPY package.json* pnpm-lock.yaml* ./
 RUN if [ ! -f package.json ]; then echo '{}' > package.json; fi
 RUN if [ ! -f pnpm-lock.yaml ]; then touch pnpm-lock.yaml; fi
 
-# Remove any existing node_modules, pnpm-lock.yaml, and clean the pnpm store if it exists
+# Remove any existing node_modules and pnpm store prune
 RUN rm -rf node_modules pnpm-lock.yaml && \
     [ -d "/root/.local/share/pnpm/store" ] && pnpm store prune || echo "No pnpm store to prune"
 
@@ -35,6 +35,10 @@ RUN echo "DB_HOST=$DB_HOST" >> .env && \
     echo "DB_PASSWORD=$DB_PASSWORD" >> .env && \
     echo "DB_NAME=$DB_NAME" >> .env && \
     echo "AUTH_SECRET=$AUTH_SECRET" >> .env
+
+# Print installed packages and types before build
+RUN pnpm list --depth 0
+RUN pnpm exec tsc --noEmit
 
 # Build the application if there's a build script
 RUN if grep -q '"build"' package.json; then pnpm build; fi
@@ -55,10 +59,6 @@ WORKDIR /app
 
 # Copy the built application and .env file from the builder stage
 COPY --from=builder /app /app
-
-# Prune the pnpm store again to ensure a clean environment, if it exists
-RUN [ -d "/root/.local/share/pnpm/store" ] && pnpm store prune || echo "No pnpm store to prune" && \
-    rm -rf node_modules
 
 # Expose the port
 EXPOSE 4321

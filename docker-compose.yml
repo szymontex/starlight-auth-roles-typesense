@@ -5,6 +5,10 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
+      args:
+        - BUILDKIT_PROGRESS=plain
+      options:
+        - --progress=plain  # Dodaj tę linię
     ports:
       - "26396:4321"
     environment:
