@@ -18,9 +18,9 @@ COPY package.json* pnpm-lock.yaml* ./
 RUN if [ ! -f package.json ]; then echo '{}' > package.json; fi
 RUN if [ ! -f pnpm-lock.yaml ]; then touch pnpm-lock.yaml; fi
 
-# Remove any existing node_modules and clean the pnpm store
+# Remove any existing node_modules, pnpm-lock.yaml, and clean the pnpm store if it exists
 RUN rm -rf node_modules pnpm-lock.yaml && \
-    pnpm store prune
+    [ -d "/root/.local/share/pnpm/store" ] && pnpm store prune || echo "No pnpm store to prune"
 
 # Install dependencies if package.json exists, forcing a fresh installation
 RUN if [ -s package.json ]; then pnpm install --force; fi
@@ -56,8 +56,9 @@ WORKDIR /app
 # Copy the built application and .env file from the builder stage
 COPY --from=builder /app /app
 
-# Prune the pnpm store again to ensure a clean environment
-RUN pnpm store prune && rm -rf node_modules
+# Prune the pnpm store again to ensure a clean environment, if it exists
+RUN [ -d "/root/.local/share/pnpm/store" ] && pnpm store prune || echo "No pnpm store to prune" && \
+    rm -rf node_modules
 
 # Expose the port
 EXPOSE 4321
