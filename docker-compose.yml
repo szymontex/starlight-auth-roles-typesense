@@ -21,14 +21,3 @@ services:
       - PYTHONIOENCODING=utf-8
     command: pnpm start
     network_mode: bridge
-
-  typesense:
-    image: typesense/typesense:27.0
-    restart: on-failure
-    ports:
-      - "26397:8108"
-    volumes:
-      - ./typesense-data:/data
-    command: '--data-dir /data --api-key=${TYPESENSE_API_KEY} --enable-cors'
-    environment:
-      - TYPESENSE_API_KEY=${TYPESENSE_API_KEY}
