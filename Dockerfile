@@ -52,7 +52,7 @@ ENV LC_ALL=C.UTF-8
 ENV PYTHONIOENCODING=utf-8
 
 # Install pnpm
-RUN npm install -g pnpm@9.8.0
+RUN npm install -g pnpm
 
 # Set working directory
 WORKDIR /app
