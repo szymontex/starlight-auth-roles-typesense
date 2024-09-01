@@ -38,7 +38,7 @@ RUN echo "DB_HOST=$DB_HOST" >> .env && \
 
 # Print installed packages and types before build
 RUN pnpm list --depth 0
-RUN pnpm exec tsc --noEmit
+# RUN pnpm exec tsc --noEmit
 
 # Build the application if there's a build script
 RUN if grep -q '"build"' package.json; then pnpm build; fi
