@@ -1,0 +1,364 @@
+---
+import Icon from '../../node_modules/@astrojs/starlight/user-components/Icon.astro';
+import project from 'virtual:starlight/project-context';
+import type { Props } from '@astrojs/starlight/props';
+
+const { labels } = Astro.props;
+---
+
+<site-search
+	data-translations={JSON.stringify({ placeholder: labels['search.label'] })}
+	data-strip-trailing-slash={project.trailingSlash === 'never'}
+>
+	<button
+		data-open-modal
+		disabled
+		aria-label={labels['search.label']}
+		aria-keyshortcuts="Control+K"
+	>
+		<Icon name="magnifier" />
+		<span class="sl-hidden md:sl-block" aria-hidden="true">{labels['search.label']}</span>
+		<kbd class="sl-hidden md:sl-flex" style="display: none;">
+			<kbd>{labels['search.ctrlKey']}</kbd><kbd>K</kbd>
+		</kbd>
+	</button>
+
+	<dialog aria-label={labels['search.label']}>
+		<div class="dialog-frame sl-flex">
+			<button data-close-modal class="sl-flex md:sl-hidden">
+				{labels['search.cancelLabel']}
+			</button>
+			<div class="search-container">
+				<div id="starlight__search">
+					<div class="search-bar">
+						<input 
+							type="text" 
+							id="search-input"
+							placeholder={labels['search.label']} 
+							autocomplete="off"
+						/>
+						<button id="search-clear" aria-label="Clear search">
+							<Icon name="close" />
+						</button>
+					</div>
+					<div id="search-results"></div>
+				</div>
+			</div>
+		</div>
+	</dialog>
+</site-search>
+
+<script>
+	  interface SearchDocument {
+    title: string;
+    slug: string;
+    description?: string;
+    content: string;
+    path: string;
+    fullPath: string;
+  }
+
+  interface CombinedSearchResult {
+    found: number;
+    hits: Array<{
+      document: SearchDocument;
+      highlights: Array<{
+        field: string;
+        snippet?: string;
+      }>;
+    }>;
+  }
+	class SiteSearch extends HTMLElement {
+		constructor() {
+			super();
+			this.initSearch();
+		}
+
+		async initSearch() {
+			const openBtn = this.querySelector<HTMLButtonElement>('button[data-open-modal]')!;
+			const closeBtn = this.querySelector<HTMLButtonElement>('button[data-close-modal]')!;
+			const dialog = this.querySelector('dialog')!;
+			const dialogFrame = this.querySelector('.dialog-frame')!;
+			const searchInput = this.querySelector<HTMLInputElement>('#search-input')!;
+			const searchClear = this.querySelector<HTMLButtonElement>('#search-clear')!;
+			const searchResults = this.querySelector<HTMLDivElement>('#search-results')!;
+
+			const onClick = (event: MouseEvent) => {
+				const isLink = 'href' in (event.target || {});
+				if (isLink || (document.body.contains(event.target as Node) && !dialogFrame.contains(event.target as Node))) {
+					closeModal();
+				}
+			};
+
+			const openModal = (event?: MouseEvent) => {
+				dialog.showModal();
+				document.body.toggleAttribute('data-search-modal-open', true);
+				searchInput?.focus();
+				event?.stopPropagation();
+				window.addEventListener('click', onClick);
+			};
+
+			const closeModal = () => dialog.close();
+
+			openBtn.addEventListener('click', openModal);
+			openBtn.disabled = false;
+			closeBtn.addEventListener('click', closeModal);
+
+			dialog.addEventListener('close', () => {
+				document.body.toggleAttribute('data-search-modal-open', false);
+				window.removeEventListener('click', onClick);
+			});
+
+			window.addEventListener('keydown', (e) => {
+				if ((e.metaKey === true || e.ctrlKey === true) && e.key === 'k') {
+					dialog.open ? closeModal() : openModal();
+					e.preventDefault();
+				}
+			});
+
+			searchInput.addEventListener('input', async (e) => {
+				const query = (e.target as HTMLInputElement).value;
+				if (query.length > 2) {
+					try {
+						await this.performSearch(query, searchResults);
+					} catch (error) {
+						console.error('components/Search.astro  Error during search:', error);
+					}
+				} else {
+					searchResults.innerHTML = '';
+				}
+			});
+
+			searchClear.addEventListener('click', () => {
+				searchInput.value = '';
+				searchResults.innerHTML = '';
+				searchInput.focus();
+			});
+		}
+
+		async performSearch(query: string, container: HTMLElement) {
+  console.log('components/Search.astro Performing search for:', query);
+  try {
+    const response = await fetch('/api/search', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ query }),
+    });
+
+    console.log('components/Search.astro Response status:', response.status);
+    console.log('components/Search.astro Response headers:', response.headers);
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      console.error('components/Search.astro Error response:', errorText);
+      throw new Error(`components/Search.astro Search request failed with status ${response.status}: ${errorText}`);
+    }
+
+    const results = await response.json();
+    console.log('components/Search.astro Search results:', results);
+    this.displayResults(results, container, query);
+  } catch (error) {
+    console.error('components/Search.astro Błąd podczas wyszukiwania:', error);
+    container.innerHTML = `<p>Błąd podczas wyszukiwania: ${error instanceof Error ? error.message : 'Nieznany błąd'}</p>`;
+  }
+}
+getPolishNumeralForm(count: number) {
+    if (count === 1) {
+      return 'wynik';
+    }
+    const lastDigit = count % 10;
+    const lastTwoDigits = count % 100;
+
+    if (lastDigit >= 2 && lastDigit <= 4 && (lastTwoDigits < 12 || lastTwoDigits > 14)) {
+      return 'wyniki';
+    }
+
+    return 'wyników';
+  }
+
+  displayResults(results: CombinedSearchResult, container: HTMLElement, query: string) {
+    container.innerHTML = '';
+
+    const resultsCount = results.found || 0;
+    container.innerHTML = `<p class="results-count">${resultsCount} ${this.getPolishNumeralForm(resultsCount)} dla "${query}"</p>`;
+
+			if (results.hits && results.hits.length > 0) {
+				const resultsList = document.createElement('ul');
+				resultsList.className = 'search-results-list';
+
+				results.hits.forEach((hit) => {
+        const li = document.createElement('li');
+        
+        const titleHighlight = hit.highlights.find(h => h.field === 'title');
+        const title = titleHighlight?.snippet || hit.document.title;
+
+        const contentHighlight = hit.highlights.find(h => h.field === 'content' || h.field === 'description');
+        const content = contentHighlight?.snippet || hit.document.description || 'No description';
+
+        li.innerHTML = `
+          <h3><a href="${hit.document.fullPath}">${title}</a></h3>
+          <p>${content}</p>
+        `;
+        resultsList.appendChild(li);
+      });
+
+      container.appendChild(resultsList);
+    } else {
+				container.innerHTML += '<p>Nie znaleziono.</p>';
+			}
+		}
+	}
+
+	customElements.define('site-search', SiteSearch);
+</script>
+
+<style>
+	site-search {
+		display: contents;
+	}
+
+	button[data-open-modal] {
+		display: flex;
+		align-items: center;
+		gap: 0.5rem;
+		border: 0;
+		background-color: transparent;
+		color: var(--sl-color-gray-1);
+		cursor: pointer;
+		height: 2.5rem;
+		font-size: var(--sl-text-xl);
+	}
+
+	@media (min-width: 50rem) {
+		button[data-open-modal] {
+			border: 1px solid var(--sl-color-gray-5);
+			border-radius: 0.5rem;
+			padding-inline-start: 0.75rem;
+			padding-inline-end: 0.5rem;
+			background-color: var(--sl-color-black);
+			color: var(--sl-color-gray-2);
+			font-size: var(--sl-text-sm);
+			width: 100%;
+			max-width: 22rem;
+		}
+		button[data-open-modal]:hover {
+			border-color: var(--sl-color-gray-2);
+			color: var(--sl-color-white);
+		}
+	}
+
+	dialog {
+		margin: 0;
+		padding: 0;
+		background-color: var(--sl-color-gray-6);
+		border: 1px solid var(--sl-color-gray-5);
+		width: 100%;
+		max-width: 100%;
+		height: 100%;
+		max-height: 100%;
+		box-shadow: var(--sl-shadow-lg);
+	}
+
+	dialog::backdrop {
+		background-color: var(--sl-color-backdrop-overlay);
+		-webkit-backdrop-filter: blur(0.25rem);
+		backdrop-filter: blur(0.25rem);
+	}
+
+	.dialog-frame {
+		display: flex;
+		flex-direction: column;
+		gap: 1rem;
+		padding: 1.5rem;
+	}
+
+	.search-container {
+		display: flex;
+		flex-direction: column;
+		gap: 1rem;
+	}
+
+	.search-bar {
+		display: flex;
+		align-items: center;
+		gap: 0.5rem;
+		border: 1px solid var(--sl-color-gray-5);
+		border-radius: 0.5rem;
+		padding: 0.5rem;
+		background-color: var(--sl-color-black);
+	}
+
+	#search-input {
+		flex-grow: 1;
+		border: none;
+		background: transparent;
+		color: var(--sl-color-white);
+		font-size: var(--sl-text-base);
+	}
+
+	#search-input:focus {
+		outline: none;
+	}
+
+	#search-clear {
+		background: none;
+		border: none;
+		color: var(--sl-color-gray-2);
+		cursor: pointer;
+	}
+
+	.search-results-list {
+		list-style-type: none;
+		padding: 0;
+	}
+
+	.search-results-list li {
+		margin-bottom: 1rem;
+		padding-bottom: 1rem;
+		border-bottom: 1px solid var(--sl-color-gray-5);
+	}
+
+	.search-results-list h3 {
+		margin: 0 0 0.5rem 0;
+	}
+
+	.search-results-list a {
+		color: var(--sl-color-white);
+		text-decoration: none;
+	}
+
+	.search-results-list a:hover {
+		text-decoration: underline;
+	}
+
+	.search-results-list p {
+		margin: 0;
+		font-size: 0.9rem;
+		color: var(--sl-color-gray-3);
+	}
+
+	.results-count {
+		margin-bottom: 1rem;
+		font-style: italic;
+		color: var(--sl-color-gray-3);
+	}
+
+	mark {
+		background-color: var(--sl-color-accent-low);
+		color: var(--sl-color-white);
+	}
+
+	@media (min-width: 50rem) {
+		dialog {
+			margin: 4rem auto auto;
+			border-radius: 0.5rem;
+			width: 90%;
+			max-width: 40rem;
+			height: max-content;
+			min-height: 15rem;
+			max-height: calc(100% - 8rem);
+		}
+	}
+</style>

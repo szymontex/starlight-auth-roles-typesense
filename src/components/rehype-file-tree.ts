@@ -6,8 +6,8 @@ import { fromHtml } from 'hast-util-from-html';
 import { toString } from 'hast-util-to-string';
 import { rehype } from 'rehype';
 import { CONTINUE, SKIP, visit } from 'unist-util-visit';
-import { Icons } from '../components/Icons';
-import { definitions } from './file-tree-icons';
+import { Icons } from '../components/Icons.ts';
+import { definitions } from './file-tree-icons.js';
 
 declare module 'vfile' {
 	interface DataMap {

@@ -3,6 +3,8 @@ import type { Props } from '@astrojs/starlight/props'
 import StarlightPage from '@astrojs/starlight/components/StarlightPage.astro'
 import { verifyToken } from '../lib/auth';
 import { generateSidebar, convertToStarlightSidebar } from '../utils/sidebarUtils';
+
+
 type StarlightPageFrontmatter = any;
 
 console.log('pages/index.astro');
@@ -68,6 +70,16 @@ const logoutButton = user ? {
   variant: "primary"
 };
 
+// Inicjalizacja klienta Typesense
+const typesenseConfig = {
+  apiKey: import.meta.env.PUBLIC_TYPESENSE_API_KEY,
+  host: import.meta.env.PUBLIC_TYPESENSE_HOST,
+  port: import.meta.env.PUBLIC_TYPESENSE_PORT,
+  protocol: import.meta.env.PUBLIC_TYPESENSE_PROTOCOL
+};
+
+console.log('Server-side: Typesense config:', typesenseConfig);
+
 const frontmatter: StarlightPageFrontmatter = {
   title: title,
   description: description,
@@ -85,6 +97,13 @@ const frontmatter: StarlightPageFrontmatter = {
   },
   // Dodaj inne właściwości, które mogą być wymagane przez StarlightPageFrontmatter
 };
+
+
+
+
+
+
+
 ---
 
 <StarlightPage
@@ -93,6 +112,11 @@ const frontmatter: StarlightPageFrontmatter = {
   sidebar={starlightSidebar}
   >
 </StarlightPage>
+
+<script>
+  console.log('Initial script executed');
+</script>
+
 
 <script>
   function handleLogout(event: { preventDefault: () => void; }) {
@@ -128,7 +152,7 @@ const frontmatter: StarlightPageFrontmatter = {
 
     
     if (logoutButton) {
-      console.log('pages/index.astro Logout button found:', logoutButton);
+      // console.log('pages/index.astro Logout button found:', logoutButton);
       logoutButton.addEventListener('click', handleLogout);
       
       // Dodajemy nasze własne atrybuty
@@ -136,14 +160,14 @@ const frontmatter: StarlightPageFrontmatter = {
       logoutButton.id = 'logout-button';
       logoutButton.classList.add('logout-button', 'astro-button');
     } else {
-      console.log('pages/index.astro Logout button not found');
+      // console.log('pages/index.astro Logout button not found');
     }
   }
 
   function attemptSetup() {
     setupLogoutButton();
     if (!document.querySelector('[data-logout]')) {
-      console.log('pages/index.astro Retrying setup...');
+      // console.log('pages/index.astro Retrying setup...');
       setTimeout(attemptSetup, 500);
     }
   }
