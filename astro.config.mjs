@@ -2,7 +2,7 @@ import { defineConfig } from 'astro/config';
 import starlight from '@astrojs/starlight';
 import node from '@astrojs/node'; // Import adaptera Node.js
 import { generateSidebar } from './src/utils/sidebarUtils';
-import starlightDocSearch from '@astrojs/starlight-docsearch';
+//import starlightDocSearch from '@astrojs/starlight-docsearch';
 
 export default defineConfig({
   output: 'server',
@@ -60,12 +60,12 @@ export default defineConfig({
       //   }),
       // ],
       defaultLocale: 'root',
-      locales: {
-        root: {
-          label: 'Polski',
-          lang: 'pl',
-        },
-      },
+      // locales: {
+      //   root: {
+      //     label: 'Polski',
+      //     lang: 'pl',
+      //   },
+      // },
       // sidebar: generateSidebar('klient'),
     }),
   ],

@@ -3,30 +3,30 @@ import Icon from '../../node_modules/@astrojs/starlight/user-components/Icon.ast
 import project from 'virtual:starlight/project-context';
 import type { Props } from '@astrojs/starlight/props';
 
-const { labels } = Astro.props;
+const t = Astro.locals.t;
 ---
 
 <site-search
-	data-translations={JSON.stringify({ placeholder: labels['search.label'] })}
+	data-translations={JSON.stringify({ placeholder: t('search.label') })}
 	data-strip-trailing-slash={project.trailingSlash === 'never'}
 >
 	<button
 		data-open-modal
 		disabled
-		aria-label={labels['search.label']}
+		aria-label={t('search.label')}
 		aria-keyshortcuts="Control+K"
 	>
 		<Icon name="magnifier" />
-		<span class="sl-hidden md:sl-block" aria-hidden="true">{labels['search.label']}</span>
+		<span class="sl-hidden md:sl-block" aria-hidden="true">{t('search.label')}</span>
 		<kbd class="sl-hidden md:sl-flex" style="display: none;">
-			<kbd>{labels['search.ctrlKey']}</kbd><kbd>K</kbd>
+			<kbd>{t('search.ctrlKey')}</kbd><kbd>K</kbd>
 		</kbd>
 	</button>
 
-	<dialog aria-label={labels['search.label']}>
+	<dialog aria-label={t('search.label')}>
 		<div class="dialog-frame sl-flex">
 			<button data-close-modal class="sl-flex md:sl-hidden">
-				{labels['search.cancelLabel']}
+				{t('search.cancelLabel')}
 			</button>
 			<div class="search-container">
 				<div id="starlight__search">
@@ -34,10 +34,10 @@ const { labels } = Astro.props;
 						<input 
 							type="text" 
 							id="search-input"
-							placeholder={labels['search.label']} 
+							placeholder={t('search.label')} 
 							autocomplete="off"
 						/>
-						<button id="search-clear" aria-label="Clear search">
+						<button id="search-clear" aria-label={t('search.clear' as any)}>
 							<Icon name="close" />
 						</button>
 					</div>

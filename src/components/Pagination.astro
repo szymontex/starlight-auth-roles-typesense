@@ -1,13 +1,15 @@
 ---
-import Icon from './Icon.astro';
+//import Icon from './Icon.astro';
+import { Icon } from '@astrojs/starlight/components';
 import type { Props } from '@astrojs/starlight/props';
 
 // Odczyt roli użytkownika z ciasteczka
 const userRole = Astro.cookies.get('userRole')?.value || 'klient';
 
-const { dir, labels, pagination } = Astro.props;
+const { dir, pagination } = Astro.props;
 const { prev, next } = pagination;
 const isRtl = dir === 'rtl';
+const t = Astro.locals.t;
 
 function hasAccessToLink(link: string, role: string): boolean {
   if (link.startsWith('/admin') && role !== 'admin') return false;
@@ -27,7 +29,7 @@ const nextLink = next && hasAccessToLink(next.href as string, userRole) ? next :
 		<a href={prevLink.href as string} rel="prev">
 			<Icon name={isRtl ? 'right-arrow' : 'left-arrow'} size="1.5rem" />
 			<span>
-				{labels['page.previousLink']}
+				{t('page.previousLink')}
 				<br />
 				<span class="link-title">{prevLink.label}</span>
 			</span>
@@ -37,7 +39,7 @@ const nextLink = next && hasAccessToLink(next.href as string, userRole) ? next :
 		<a href={nextLink.href as string} rel="next">
 			<Icon name={isRtl ? 'left-arrow' : 'right-arrow'} size="1.5rem" />
 			<span>
-				{labels['page.nextLink']}
+				{t('page.nextLink')}
 				<br />
 				<span class="link-title">{nextLink.label}</span>
 			</span>
