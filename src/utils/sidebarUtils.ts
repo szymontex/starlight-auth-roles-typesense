@@ -1,33 +1,41 @@
-import type { SidebarEntry } from '../../node_modules/@astrojs/starlight/utils/navigation';
+import type { SidebarEntry } from '@astrojs/starlight/utils/navigation';
 type StarlightSidebarItem = { label: string; items: { label: string; link: string }[] };
 
+// Function to generate sidebar based on user role
 export function generateSidebar(userRole: string): StarlightSidebarItem[] {
   const allSidebarItems: StarlightSidebarItem[] = [
     {
       label: 'Admin',
       items: [
-        { label: 'Admin test', link: '/admin/testowy' },
-        { label: 'Admin testcopy', link: '/admin/testowycopy' },
+        { label: 'System Overview', link: '/admin/system-overview' },
+        { label: 'User Management', link: '/admin/user-management' },
+        { label: 'Server Configuration', link: '/admin/server-configuration' },
+        { label: 'Security Policies', link: '/admin/security-policies' },
       ],
     },
     {
-      label: 'Spółka',
+      label: 'Company',
       items: [
-        { label: 'Spółka Guide', link: '/spolka/testowy' },
+        { label: 'Company Guidelines', link: '/company/guidelines' },
+        { label: 'Project Management', link: '/company/project-management' },
+        { label: 'Financial Reporting', link: '/company/financial-reporting' },
       ],
     },
     {
-      label: 'Realizator',
+      label: 'Editor',
       items: [
-        { label: 'Realizator Guide', link: '/realizator/testowy' },
+        { label: 'Content Creation', link: '/editor/content-creation' },
+        { label: 'Media Management', link: '/editor/media-management' },
+        { label: 'Style Guide', link: '/editor/style-guide' },
       ],
     },
     {
-      label: 'Klient',
+      label: 'Guest',
       items: [
-        { label: 'mozliwosci markdown', link: '/klient/testowy' },
-        { label: 'Klient Guide', link: '/klient/testowycopy' },
-        { label: 'google docs test', link: '/klient/googledocs' },
+        { label: 'Getting Started', link: '/guest/getting-started' },
+        { label: 'FAQs', link: '/guest/faqs' },
+        { label: 'Support', link: '/guest/support' },
+        { label: 'Markdown Capabilities', link: '/guest/markdown' },
       ],
     },
   ];
@@ -40,14 +48,14 @@ export function generateSidebar(userRole: string): StarlightSidebarItem[] {
     case 'admin':
       filteredSidebar = allSidebarItems;
       break;
-    case 'spolka':
+    case 'companyMember':
       filteredSidebar = allSidebarItems.filter(item => item.label !== 'Admin');
       break;
-    case 'realizator':
-      filteredSidebar = allSidebarItems.filter(item => item.label !== 'Admin' && item.label !== 'Spółka');
+    case 'editor':
+      filteredSidebar = allSidebarItems.filter(item => item.label !== 'Admin' && item.label !== 'Company');
       break;
-    case 'klient':
-      filteredSidebar = allSidebarItems.filter(item => item.label === 'Klient');
+    case 'guest':
+      filteredSidebar = allSidebarItems.filter(item => item.label === 'Guest');
       break;
     default:
       filteredSidebar = [];
@@ -55,6 +63,8 @@ export function generateSidebar(userRole: string): StarlightSidebarItem[] {
 
   return filteredSidebar.length > 0 ? filteredSidebar : [{ label: 'Menu', items: [] }];
 }
+
+// Function to convert StarlightSidebarItem to SidebarEntry format
 export function convertToSidebarEntry(items: StarlightSidebarItem[]): SidebarEntry[] {
   return items.map(group => ({
     type: 'group',
@@ -71,7 +81,8 @@ export function convertToSidebarEntry(items: StarlightSidebarItem[]): SidebarEnt
     badge: undefined
   }));
 }
-// Dodaj nową funkcję konwertującą
+
+// Function to convert to basic sidebar format
 export function convertToStarlightSidebar(sidebar: StarlightSidebarItem[]): any[] {
   return sidebar.map(group => ({
     label: group.label,

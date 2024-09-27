@@ -4,30 +4,28 @@ import StarlightPage from '@astrojs/starlight/components/StarlightPage.astro'
 import { verifyToken } from '../lib/auth';
 import { generateSidebar, convertToStarlightSidebar } from '../utils/sidebarUtils';
 
-
 type StarlightPageFrontmatter = any;
 
 console.log('pages/index.astro');
 
-function odmianaRoli(userRole: string) {
+function getRoleLabel(userRole: string) {
   switch (userRole) {
     case 'admin':
-      return 'admina';
-    case 'klient':
-      return 'klienta';
-    case 'spółka':
-      return 'spółkowicza';
-    case 'realizator':
-      return 'realizatora';
+      return 'admin';
+    case 'guest':
+      return 'guest';
+    case 'companyMember':
+      return 'company member';
+    case 'editor':
+      return 'editor';
     default:
-      return userRole; // Zwraca oryginalną wartość, jeśli nie pasuje do żadnego przypadku
+      return userRole; // Returns the original value if it doesn't match any case
   }
 }
 
-
 let user;
 const token = Astro.cookies.get('token')?.value;
-// Sprawdź token w ciasteczku, jeśli user nie jest ustawiony
+// Check the token in the cookie if the user is not set
 if (token) {
   try {
     user = verifyToken(token);
@@ -36,26 +34,26 @@ if (token) {
   }
 }
 
-// Dodaj sprawdzanie, czy user istnieje, zanim uzyskasz dostęp do jego właściwości
+// Ensure user exists before accessing its properties
 if (user) {
   console.log('pages/index.astro User ID:', user.id);
   console.log('pages/index.astro User username:', user.username);
   console.log('pages/index.astro User role:', user.role);
 }
 
-const userRole = user?.role || 'klient';
+const userRole = user?.role || 'guest';
 console.log('pages/index.astro Userrole:', userRole);
 const dynamicSidebar = generateSidebar(userRole);
 const starlightSidebar = convertToStarlightSidebar(dynamicSidebar);
 
-const odmiana = odmianaRoli(userRole);
+const roleLabel = getRoleLabel(userRole);
 
 const title = "Manual";
 const description = "Get started building your docs site with Starlight.";
-const tagline = `obsługi studia Flightcore dla ${odmiana}`;
+const tagline = `Documentation for ${roleLabel}`;
 
 const logoutButton = user ? {
-  text: "Wyloguj",
+  text: "Logout",
   link: "#",
   icon: "right-arrow",
   variant: "primary",
@@ -64,13 +62,13 @@ const logoutButton = user ? {
   'data-logout': 'true',
   custom: true
 } : {
-  text: "Zaloguj",
+  text: "Login",
   link: "/login",
   icon: "right-arrow",
   variant: "primary"
 };
 
-// Inicjalizacja klienta Typesense
+// Initialize Typesense client configuration
 const typesenseConfig = {
   apiKey: import.meta.env.PUBLIC_TYPESENSE_API_KEY,
   host: import.meta.env.PUBLIC_TYPESENSE_HOST,
@@ -87,36 +85,28 @@ const frontmatter: StarlightPageFrontmatter = {
   hero: {
     tagline: tagline,
     actions: [
-      logoutButton as any, // Ostatecznie wymuszenie zgodności typów
+      logoutButton as any, // Force type compatibility
       {
-        text: "Przejdź do strony Flightcore Studios",
-        link: "https://flightcore.pl",
+        text: "Visit Our Website",
+        link: "https://example.com", // Replace with the appropriate link
         icon: "external"
       }
     ]
   },
-  // Dodaj inne właściwości, które mogą być wymagane przez StarlightPageFrontmatter
+  // Add other properties as required by StarlightPageFrontmatter
 };
-
-
-
-
-
-
-
 ---
 
 <StarlightPage
   frontmatter={frontmatter}
   hasSidebar={true}
   sidebar={starlightSidebar}
-  >
+>
 </StarlightPage>
 
 <script>
   console.log('Initial script executed');
 </script>
-
 
 <script>
   function handleLogout(event: { preventDefault: () => void; }) {
@@ -146,16 +136,15 @@ const frontmatter: StarlightPageFrontmatter = {
   }
 
   function setupLogoutButton() {
-    // Szukamy przycisku po tekście "Wyloguj"
+    // Find the button by its text "Logout"
     const buttons = Array.from(document.querySelectorAll('a, button'));
-    const logoutButton = buttons.find(button => button.textContent?.trim() === 'Wyloguj');
+    const logoutButton = buttons.find(button => button.textContent?.trim() === 'Logout');
 
-    
     if (logoutButton) {
       // console.log('pages/index.astro Logout button found:', logoutButton);
       logoutButton.addEventListener('click', handleLogout);
       
-      // Dodajemy nasze własne atrybuty
+      // Add custom attributes
       logoutButton.setAttribute('data-logout', 'true');
       logoutButton.id = 'logout-button';
       logoutButton.classList.add('logout-button', 'astro-button');
@@ -172,16 +161,16 @@ const frontmatter: StarlightPageFrontmatter = {
     }
   }
 
-  // Próbujemy ustawić przycisk po załadowaniu DOM
+  // Try setting up the button after DOM is loaded
   document.addEventListener('DOMContentLoaded', attemptSetup);
 
-  // Próbujemy ustawić przycisk po pełnym załadowaniu strony
+  // Try setting up the button after the page is fully loaded
   window.addEventListener('load', attemptSetup);
 
-  // Nasłuchujemy na zdarzenie Astro
+  // Listen for the Astro page load event
   document.addEventListener('astro:page-load', attemptSetup);
 
-  // Sprawdzamy, czy użytkownik jest zalogowany po stronie klienta
+  // Check if the user is logged in on the client-side
   const token = localStorage.getItem('token');
   if (token) {
     fetch('/api/auth/me', {
@@ -195,8 +184,8 @@ const frontmatter: StarlightPageFrontmatter = {
       if (content) {
         content.innerHTML = `
           <div>
-            <h1>Cześć, ${user.ksywa || user.username}!</h1>
-            <p>Wybierz interesujący Cię temat lub skorzystaj z wyszukiwarki.</p>
+            <h1>Hello, ${user.username || user.username}!</h1>
+            <p>Select a topic of interest or use the search bar.</p>
           </div>
         `;
       }
@@ -210,4 +199,3 @@ const frontmatter: StarlightPageFrontmatter = {
 
   console.log('pages/index.astro Script loaded');
 </script>
-

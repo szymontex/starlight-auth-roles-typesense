@@ -33,22 +33,22 @@ export const ALL: APIRoute = async ({ request, cookies }) => {
   console.log(`pages/api/search Search API called with ${request.method} method`);
   
   if (request.method === 'POST') {
-    const userRole = cookies.get('userRole')?.value || 'klient';
+    const userRole = cookies.get('userRole')?.value || 'guest';
     
     let collectionsToSearch: string[];
     switch (userRole) {
       case 'admin':
-        collectionsToSearch = ['docs_admin', 'docs_spolka', 'docs_realizator', 'docs_klient'];
+        collectionsToSearch = ['docs_admin', 'docs_companyMember', 'docs_editor', 'docs_guest'];
         break;
-      case 'spolka':
-        collectionsToSearch = ['docs_spolka', 'docs_realizator', 'docs_klient'];
+      case 'companyMember':
+        collectionsToSearch = ['docs_companyMember', 'docs_editor', 'docs_guest'];
         break;
-      case 'realizator':
-        collectionsToSearch = ['docs_realizator', 'docs_klient'];
+      case 'editor':
+        collectionsToSearch = ['docs_editor', 'docs_guest'];
         break;
-      case 'klient':
+      case 'guest':
       default:
-        collectionsToSearch = ['docs_klient'];
+        collectionsToSearch = ['docs_guest'];
     }
 
     try {

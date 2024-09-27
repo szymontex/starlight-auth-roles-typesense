@@ -1,13 +1,13 @@
 ---
 import type { Props } from '@astrojs/starlight/props';
-import type { SidebarEntry, Link } from '../../node_modules/@astrojs/starlight/utils/navigation';
+import type { SidebarEntry, Link } from '@astrojs/starlight/utils/navigation';
 import MobileMenuFooter from '@astrojs/starlight/components/MobileMenuFooter.astro';
 import SidebarSublist from '@astrojs/starlight/components/SidebarSublist.astro';
 import { generateSidebar } from '../utils/sidebarUtils';
 
 const { sidebar } = Astro.props;
 
-const userRole = Astro.cookies.get('userRole')?.value || 'klient';
+const userRole = Astro.cookies.get('userRole')?.value || 'guest';
 
 console.log('components/Sidebar.astro userRole:', userRole);
 
@@ -15,7 +15,7 @@ const dynamicSidebar = generateSidebar(userRole);
 console.log('components/Sidebar.astro dynamicSidebar:', dynamicSidebar);
 console.log('components/Sidebar.astro Sidebar:', sidebar);
 
-// Konwersja dynamicSidebar na format akceptowany przez SidebarSublist
+// Convert dynamicSidebar to the format accepted by SidebarSublist
 const convertedSidebar: SidebarEntry[] = dynamicSidebar.map(group => ({
   type: 'group',
   label: group.label,
@@ -31,7 +31,7 @@ const convertedSidebar: SidebarEntry[] = dynamicSidebar.map(group => ({
   badge: undefined
 } as SidebarEntry));
 
-// Zabezpieczenie przed undefined
+// Fallback in case of undefined
 const safeSublist: SidebarEntry[] = convertedSidebar.length > 0 ? convertedSidebar : [{
   type: 'group',
   label: 'Menu',

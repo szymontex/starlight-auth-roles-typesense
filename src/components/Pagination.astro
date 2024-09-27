@@ -1,10 +1,9 @@
 ---
-//import Icon from './Icon.astro';
 import { Icon } from '@astrojs/starlight/components';
 import type { Props } from '@astrojs/starlight/props';
 
-// Odczyt roli użytkownika z ciasteczka
-const userRole = Astro.cookies.get('userRole')?.value || 'klient';
+// Retrieve the user role from cookies
+const userRole = Astro.cookies.get('userRole')?.value || 'guest';
 
 const { dir, pagination } = Astro.props;
 const { prev, next } = pagination;
@@ -13,13 +12,13 @@ const t = Astro.locals.t;
 
 function hasAccessToLink(link: string, role: string): boolean {
   if (link.startsWith('/admin') && role !== 'admin') return false;
-  if (link.startsWith('/spolka') && (role !== 'admin' && role !== 'spolka')) return false;
-  if (link.startsWith('/realizator') && (role !== 'admin' && role !== 'spolka' && role !== 'realizator')) return false;
-  if (link.startsWith('/klient') && (role !== 'admin' && role !== 'spolka' && role !== 'realizator' && role !== 'klient')) return false;
+  if (link.startsWith('/company') && (role !== 'admin' && role !== 'companyMember')) return false;
+  if (link.startsWith('/editor') && (role !== 'admin' && role !== 'companyMember' && role !== 'editor')) return false;
+  if (link.startsWith('/guest') && (role !== 'admin' && role !== 'companyMember' && role !== 'editor' && role !== 'guest')) return false;
   return true;
 }
 
-// Sprawdzenie dostępu do linków na podstawie roli użytkownika
+// Check access to links based on user role
 const prevLink = prev && hasAccessToLink(prev.href as string, userRole) ? prev : null;
 const nextLink = next && hasAccessToLink(next.href as string, userRole) ? next : null;
 ---

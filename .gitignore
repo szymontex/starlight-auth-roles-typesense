@@ -21,6 +21,5 @@ pnpm-debug.log*
 .DS_Store
 github
 github.pub
-obecny.zip
 pnpm-lock.yaml
 

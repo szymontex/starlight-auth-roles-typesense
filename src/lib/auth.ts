@@ -6,9 +6,9 @@ import jwt from 'jsonwebtoken';
 import mysql, { type FieldPacket, type RowDataPacket } from 'mysql2/promise';
 import dotenv from 'dotenv';
 
-console.log('lib/auth.ts');
-
 dotenv.config();
+
+// Function to retrieve required environment variables
 const requiredEnv = (key: string): string => {
   const value = process.env[key];
   if (!value) {
@@ -17,8 +17,9 @@ const requiredEnv = (key: string): string => {
   return value;
 };
 
-const secret: string = process.env.AUTH_SECRET!;
+const secret: string = process.env.AUTH_SECRET!; // Secret for JWT signing
 
+// MySQL database connection pool
 const db = mysql.createPool({
   host: requiredEnv('DB_HOST'),
   port: Number(requiredEnv('DB_PORT')),
@@ -27,46 +28,39 @@ const db = mysql.createPool({
   database: requiredEnv('DB_NAME'),
 });
 
-console.log('lib/auth.ts Environment variables:');
-console.log('lib/auth.ts DB_HOST:', process.env.DB_HOST);
-console.log('lib/auth.ts DB_PORT:', process.env.DB_PORT);
-console.log('lib/auth.ts DB_USER:', process.env.DB_USER);
-console.log('lib/auth.ts DB_NAME:', process.env.DB_NAME);
-console.log('lib/auth.ts AUTH_SECRET:', process.env.AUTH_SECRET ? 'Set' : 'Not set');
-// Typy danych użytkownika oraz wyników zapytania
+// Type definition for user data
 interface UserRow extends RowDataPacket {
   id: number;
-  ksywa: string;
-  haslo: string;
-  uprawnienia: string;
+  username: string;
+  passwordHash: string;
+  role: string;
 }
 
+// Local strategy for username and password authentication
 passport.use(new LocalStrategy(
   async (username, password, done) => {
     try {
-      console.log('lib/auth.ts Authenticating user:', username);
-      const [rows]: [UserRow[], FieldPacket[]] = await db.query('SELECT id, ksywa, haslo, uprawnienia FROM realizatorzy WHERE ksywa = ?', [username]);
+      const [rows]: [UserRow[], FieldPacket[]] = await db.query(
+        'SELECT id, username, passwordHash, role FROM users WHERE username = ?',
+        [username]
+      );
       const user = rows[0];
       if (!user) {
-        console.error('lib/auth.ts User not found:', username);
         return done(null, false, { message: 'Incorrect username.' });
       }
-      const res = await bcrypt.compare(password, user.haslo);
-      console.log('lib/auth.ts Comparing passwords:', { enteredPassword: password, storedHash: user.haslo, result: res });
+      const res = await bcrypt.compare(password, user.passwordHash);
       if (res) {
-        console.log('lib/auth.ts Password match successful for user:', username);
         return done(null, user);
       } else {
-        console.error('lib/auth.ts Password does not match for user:', username);
         return done(null, false, { message: 'Incorrect password.' });
       }
     } catch (err) {
-      console.error('lib/auth.ts Error during authentication:', err);
       return done(err);
     }
   }
 ));
 
+// JWT strategy for token-based authentication
 const opts = {
   jwtFromRequest: ExtractJwt.fromExtractors([
     ExtractJwt.fromAuthHeaderAsBearerToken(),
@@ -78,7 +72,10 @@ const opts = {
 
 passport.use(new JwtStrategy(opts, async (jwt_payload, done) => {
   try {
-    const [rows]: [UserRow[], FieldPacket[]] = await db.query('SELECT id, ksywa, haslo, uprawnienia FROM realizatorzy WHERE id = ?', [jwt_payload.id]);
+    const [rows]: [UserRow[], FieldPacket[]] = await db.query(
+      'SELECT id, username, passwordHash, role FROM users WHERE id = ?',
+      [jwt_payload.id]
+    );
     const user = rows.length > 0 ? rows[0] : null;
     if (user) {
       return done(null, user);
@@ -90,10 +87,12 @@ passport.use(new JwtStrategy(opts, async (jwt_payload, done) => {
   }
 }));
 
+// Function to generate JWT token
 export function generateToken(user: UserRow) {
-  return jwt.sign({ id: user.id, username: user.ksywa, role: user.uprawnienia }, secret, { expiresIn: '1h' });
+  return jwt.sign({ id: user.id, username: user.username, role: user.role }, secret, { expiresIn: '1h' });
 }
 
+// Function to verify JWT token
 export function verifyToken(token: string): any {
   const decoded = jwt.verify(token, secret) as any;
   return {

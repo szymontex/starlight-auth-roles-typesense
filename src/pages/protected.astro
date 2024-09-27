@@ -6,17 +6,22 @@ let error = null;
 console.log('pages/protected.astro');
 
 if (token) {
-  const response = await fetch('/api/protected', {
-    headers: {
-      'Authorization': `Bearer ${token}`
-    }
-  });
+  try {
+    const response = await fetch('/api/protected', {
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
+    });
 
-  if (response.ok) {
-    const data = await response.json();
-    content = data.content;
-  } else {
-    error = 'Unauthorized';
+    if (response.ok) {
+      const data = await response.json();
+      content = data.content;
+    } else {
+      error = 'Unauthorized';
+    }
+  } catch (fetchError) {
+    console.error('Error fetching protected content:', fetchError);
+    error = 'Error fetching content';
   }
 } else {
   error = 'Unauthorized';

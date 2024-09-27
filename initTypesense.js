@@ -16,7 +16,8 @@ const client = new Typesense.Client({
   connectionTimeoutSeconds: 2
 });
 
-const collections = ['docs_admin', 'docs_klient', 'docs_realizator', 'docs_spolka'];
+// Define collections
+const collections = ['docs_admin', 'docs_guest', 'docs_editor', 'docs_companyMember'];
 
 async function initializeTypesense() {
   const schema = {
@@ -30,17 +31,17 @@ async function initializeTypesense() {
   };
 
   try {
-    // Usuń istniejące kolekcje
+    // Remove existing collections
     await removeExistingCollections();
 
-    // Utwórz nowe kolekcje
+    // Create new collections
     for (const collection of collections) {
       const collectionSchema = { ...schema, name: collection };
       await client.collections().create(collectionSchema);
       console.log(`Collection ${collection} created successfully`);
     }
 
-    // Indeksuj pliki Markdown
+    // Index Markdown files
     await indexMarkdownFiles('src/content/docs');
 
     console.log('Markdown files indexed successfully');
@@ -84,7 +85,7 @@ async function indexMarkdownFiles(dir) {
         path: filePath.replace('src/content/docs/', '')
       };
 
-      // Określ kolekcję na podstawie ścieżki pliku
+      // Determine the collection based on the file path
       const collectionName = getCollectionNameFromPath(filePath);
 
       try {
@@ -104,12 +105,12 @@ function getCollectionNameFromPath(filePath) {
   switch (topLevelFolder) {
     case 'admin':
       return 'docs_admin';
-    case 'klient':
-      return 'docs_klient';
-    case 'realizator':
-      return 'docs_realizator';
-    case 'spolka':
-      return 'docs_spolka';
+    case 'guest':
+      return 'docs_guest';
+    case 'editor':
+      return 'docs_editor';
+    case 'companyMember':
+      return 'docs_companyMember';
     default:
       throw new Error(`Unknown folder: ${topLevelFolder}`);
   }

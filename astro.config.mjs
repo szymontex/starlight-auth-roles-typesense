@@ -1,74 +1,42 @@
 import { defineConfig } from 'astro/config';
 import starlight from '@astrojs/starlight';
-import node from '@astrojs/node'; // Import adaptera Node.js
-import { generateSidebar } from './src/utils/sidebarUtils';
-//import starlightDocSearch from '@astrojs/starlight-docsearch';
-//TTTTTTTTTEEEEEEEEEEEEESSSSSSSSSSSSSTTTT
+import node from '@astrojs/node'; // Node.js adapter import
+
 export default defineConfig({
-  output: 'server',
-  
+  output: 'server', // Server-side output configuration
   adapter: node({
-    mode: 'standalone', // Ustawienie wymaganego trybu działania
+    mode: 'standalone', // Running mode setting
   }),
   server: {
-    host: '0.0.0.0',
-    port: 4321,
-    cors: true,
+    host: '0.0.0.0', // Server host address
+    port: 4321, // Server port
+    cors: true, // Enable CORS
   },
-  // experimental: {
-  //   
-  // },
   prefetch: {
-    prefetchAll: false,
-    defaultStrategy: 'viewport',
+    prefetchAll: false, // Disable prefetching for all routes
+    defaultStrategy: 'viewport', // Prefetch strategy based on viewport
   },
   experimental: {
-    serverIslands: true,
-    clientPrerender: false,
+    serverIslands: true, // Enable server-side islands
+    clientPrerender: false, // Disable client-side prerendering
   },
   integrations: [
     starlight({
-      title: 'Docs',
-      description: 'Dokumentacja obslugi studia Flightcore',
-      prerender: false,
-      // pagefind: true,
-      logo: {
-        src: './src/assets/flightcore.svg',
-      favicon: '/favicon.svg',  
-      },
-      customCss: [
-        // Relative path to your custom CSS file
-        './src/styles/global.css',
-        './src/fonts/font-face.css',
-      ],
-      social: {
-        instagram: 'https://instagram.com/flightcore.studios',
-        email: 'mailto:kontakt@flightcore.pl',
-      },
+      title: 'Documentation', // Documentation title
+      description: 'General Project Documentation', // General project description
+      prerender: false, // Disable prerendering for pages
+      // logo: null,
+      // favicon: null,
+      // customCss: [],
+      // social: {},
       components: {
-        Sidebar: './src/components/Sidebar.astro',
-        PageSidebar: './src/components/PageSidebar.astro',
-        Pagination: './src/components/Pagination.astro',
-        Search: './src/components/Search.astro',
-        // Page: './src/components/CustomPage.astro',
+        Sidebar: './src/components/Sidebar.astro', // Custom Sidebar component
+        PageSidebar: './src/components/PageSidebar.astro', // Custom Page Sidebar component
+        Pagination: './src/components/Pagination.astro', // Custom Pagination component
+        Search: './src/components/Search.astro', // Custom Search component
       },
-      // plugins: [
-      //   starlightDocSearch({
-      //     appId: 'YOUR_APP_ID',
-      //     apiKey: 'YOUR_SEARCH_API_KEY',
-      //     indexName: 'YOUR_INDEX_NAME',
-      //   }),
-      // ],
-      defaultLocale: 'root',
-      // locales: {
-      //   root: {
-      //     label: 'Polski',
-      //     lang: 'pl',
-      //   },
-      // },
-      // sidebar: generateSidebar('klient'),
+      defaultLocale: 'en', // Default locale setting
     }),
   ],
-  middleware: './src/middleware.ts',
-
+  middleware: './src/middleware.ts', // Path to custom middleware
 });

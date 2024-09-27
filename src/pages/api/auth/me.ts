@@ -20,6 +20,7 @@ export const GET: APIRoute = async ({ request }) => {
       }
     });
   } catch (error) {
+    console.error('pages/api/auth/me.ts Invalid token:', error);
     return new Response('Invalid token', { status: 401 });
   }
 };

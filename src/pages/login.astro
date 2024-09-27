@@ -2,17 +2,20 @@
 import Layout from '../layouts/Layout.astro';
 
 const userRole = Astro.cookies.get('userRole')?.value;
-if (userRole && userRole !== 'klient') {
+if (userRole && userRole !== 'guest') {
   return Astro.redirect('/');
 }
 console.log('pages/login.astro');
 ---
-<style>html, body, main {  
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  height: 100%;
-}</style>
+<style>
+  html, body, main {  
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    height: 100%;
+  }
+</style>
+
 <Layout title="Login">
   <div class="login-page">
     <div class="login-card">
@@ -34,54 +37,54 @@ console.log('pages/login.astro');
 
   <script>
     async function handleSubmit(event: Event) {
-        event.preventDefault();
-        const form = event.target as HTMLFormElement;
-        const formData = new FormData(form);
-        const username = formData.get('username');
-        const password = formData.get('password');
+      event.preventDefault();
+      const form = event.target as HTMLFormElement;
+      const formData = new FormData(form);
+      const username = formData.get('username');
+      const password = formData.get('password');
 
-        try {
-            const response = await fetch('/api/auth/login', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ username, password }),
-            });
+      try {
+        const response = await fetch('/api/auth/login', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ username, password }),
+        });
 
-            if (response.ok) {
-                const data = await response.json();
-                localStorage.setItem('token', data.token);
-                console.log('Token saved to localStorage:', data.token);
-                // Ustawienie tokenu w ciasteczku po stronie klienta
-                document.cookie = `token=${data.token}; path=/; max-age=3600; SameSite=Lax; Secure`;
-                console.log('Token set as cookie');
+        if (response.ok) {
+          const data = await response.json();
+          localStorage.setItem('token', data.token);
+          console.log('Token saved to localStorage:', data.token);
+          // Set the token in a cookie on the client-side
+          document.cookie = `token=${data.token}; path=/; max-age=3600; SameSite=Lax; Secure`;
+          console.log('Token set as cookie');
 
-                // Dodanie tokenu do nagłówka Authorization dla przyszłych żądań
-                const newHeaders = new Headers(response.headers);
-                newHeaders.set('Authorization', `Bearer ${data.token}`);
-                window.location.href = '/';
-              } else {
-                const error = await response.text();
-                const errorElement = document.getElementById('error');
-                if (errorElement) {
-                    errorElement.textContent = error;
-                }
-            }
-        } catch (error) {
-            const errorElement = document.getElementById('error');
-            if (errorElement) {
-                errorElement.textContent = 'Something went wrong';
-            }
-            console.error('pages/login.astro Error during login:', error);
+          // Add the token to the Authorization header for future requests
+          const newHeaders = new Headers(response.headers);
+          newHeaders.set('Authorization', `Bearer ${data.token}`);
+          window.location.href = '/';
+        } else {
+          const error = await response.text();
+          const errorElement = document.getElementById('error');
+          if (errorElement) {
+            errorElement.textContent = error;
+          }
         }
+      } catch (error) {
+        const errorElement = document.getElementById('error');
+        if (errorElement) {
+          errorElement.textContent = 'Something went wrong';
+        }
+        console.error('pages/login.astro Error during login:', error);
+      }
     }
 
     const form = document.getElementById('login-form');
     if (form) {
-        form.addEventListener('submit', handleSubmit);
+      form.addEventListener('submit', handleSubmit);
     } else {
-        console.error('pages/login.astroLogin form not found');
+      console.error('pages/login.astro Login form not found');
     }
-</script>
+  </script>
 </Layout>

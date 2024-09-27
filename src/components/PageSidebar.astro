@@ -3,9 +3,9 @@ import type { Props } from '@astrojs/starlight/props';
 import MobileTableOfContents from '@astrojs/starlight/components/MobileTableOfContents.astro';
 import TableOfContents from '@astrojs/starlight/components/TableOfContents.astro';
 import { generateSidebar, convertToSidebarEntry } from '../utils/sidebarUtils';
-import type { SidebarEntry } from '../../node_modules/@astrojs/starlight/utils/navigation';
+import type { SidebarEntry } from '@astrojs/starlight/utils/navigation';
 
-const userRole = Astro.cookies.get('userRole')?.value || 'klient';
+const userRole = Astro.cookies.get('userRole')?.value || 'guest';
 const dynamicSidebar: SidebarEntry[] = convertToSidebarEntry(generateSidebar(userRole));
 ---
 

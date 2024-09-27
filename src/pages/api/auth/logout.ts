@@ -4,6 +4,8 @@ console.log('pages/api/auth/logout.ts');
 
 export const POST: APIRoute = async ({ cookies }) => {
   console.log('pages/api/auth/logout.ts Logout endpoint called');
+  
+  // Delete the token cookie
   cookies.delete('token', { path: '/' });
   
   return new Response(JSON.stringify({ success: true }), {

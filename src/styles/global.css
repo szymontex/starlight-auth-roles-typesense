@@ -1,67 +1,29 @@
-/* Możesz usunąć lub zakomentować te style, jeśli chcesz zachować domyślny wygląd Starlight */
-
-
-
-/* Dark mode colors. */
+/* Globalne ustawienia */
 :root {
   --sl-content-width: 55rem;
-  --sl-text-5xl: 1rem;
-  --sl-font: 'TacticRound';
-  --sl-font-bold: 'TacticRound', var(--sl-font);
-  --sl-font-medium: 'TacticRound', var(--sl-font);
-  --sl-font-regular: 'TacticRound', var(--sl-font);
-
-
-	--sl-color-accent-low: #38D430;
-	--sl-color-accent: #38D430;
-	--sl-color-accent-high: #38D430;
-	--sl-color-white: #ffffff;
-  --sl-color-bg-inline-code: #101820;
-	--sl-color-gray-1: #f3ecea;
-	--sl-color-gray-2: #c8c0be;
-	--sl-color-gray-3: #978784;
-	--sl-color-gray-4: #DBE2E6;
-	--sl-color-gray-5: #BACBDA;
-	--sl-color-gray-6: #101820;
-	--sl-color-black: #243447;
-}
-/* Light mode colors. */
-:root[data-theme='light'] {
-	--sl-color-accent-low: #38D430;
-	--sl-color-accent: #38D430;
-	--sl-color-accent-high: #640300;
-	--sl-color-white: #101820;
-	--sl-color-gray-1: #302321;
-	--sl-color-gray-2: #243447;
-	--sl-color-gray-3: #635451;
-	--sl-color-gray-4: #978784;
-	--sl-color-gray-5: #c8c0be;
-	--sl-color-gray-6: #DBE2E6;
-	--sl-color-gray-7: #DBE2E6;
-	--sl-color-black: #DBE2E6;
+  --sl-font-system: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
 }
 
-
+/* Stylizacja nagłówków i tekstów */
 h1, h2, h3 {
-  font-family: var(--sl-font-bold);
+  font-family: var(--sl-font-system);
   font-weight: 400;
   font-style: normal;
 }
 
 p, li, a {
-  font-family: var(--sl-font-regular);
+  font-family: var(--sl-font-system);
   font-weight: normal;
 }
 
 .subtitle, .medium-text {
-  font-family: var(--sl-font-medium);
+  font-family: var(--sl-font-system);
   font-weight: 100;
 }
 
-
-/* Te klasy są opcjonalne, możesz je dostosować lub rozszerzyć według potrzeb. */
+/* Stylizacja strony logowania */
 .login-page {
-  background-color: var(--sl-color-black);
+  background-color: var(--sl-color-bg, #f8f9fa); /* Użycie domyślnego koloru tła */
   display: flex;
   justify-content: center;
   align-items: center;
@@ -70,26 +32,26 @@ p, li, a {
 }
 
 .login-card {
-  background-color: var(--sl-color-gray-6);
+  background-color: var(--sl-color-bg-sidebar, #ffffff); /* Domyślny kolor tła */
   border-radius: var(--border-radius, 0.5rem);
   padding: 2rem;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   max-width: 400px;
   width: 100%;
-  color: var(--sl-color-white);
+  color: var(--sl-color-text, #212529); /* Domyślny kolor tekstu */
   box-sizing: border-box;
-  font-family: var(--sl-font-regular); /* Użycie globalnie zdefiniowanej czcionki */
+  font-family: var(--sl-font-system); /* Użycie domyślnej czcionki */
 }
 
 .login-card h1 {
   margin-bottom: 1.5rem;
   font-size: 1.5rem;
   text-align: center;
-  font-family: var(--sl-font-bold); /* Użycie globalnie zdefiniowanej czcionki */
+  font-family: var(--sl-font-system); /* Użycie domyślnej czcionki */
 }
 
 .login-card label {
-  font-family: var(--sl-font-medium); /* Użycie globalnie zdefiniowanej czcionki */
+  font-family: var(--sl-font-system); /* Użycie domyślnej czcionki */
   font-weight: 500;
   margin-bottom: 0.5rem;
   display: block;
@@ -101,12 +63,12 @@ p, li, a {
   display: block;
   width: 100%;
   padding: 0.75rem;
-  border: 1px solid var(--sl-color-gray-5);
-  background: var(--sl-color-gray-6);
+  border: 1px solid var(--sl-color-gray-5, #ced4da); /* Domyślny kolor obramowania */
+  background: var(--sl-color-bg, #ffffff); /* Domyślny kolor tła */
   font-size: 1rem;
   border-radius: var(--border-radius, 0.5rem);
   margin-bottom: 1rem;
-  color: var(--sl-color-white);
+  color: var(--sl-color-text, #212529); /* Domyślny kolor tekstu */
 }
 
 .login-card button {
@@ -114,19 +76,19 @@ p, li, a {
   padding: 0.75rem;
   border: none;
   border-radius: var(--border-radius, 0.5rem);
-  background-color: var(--sl-color-accent);
-  color: var(--sl-color-white);
+  background-color: var(--sl-color-accent, #007bff); /* Domyślny kolor akcentu */
+  color: var(--sl-color-white, #ffffff); /* Domyślny kolor tekstu */
   font-size: 1rem;
   cursor: pointer;
   transition: background-color 0.3s ease;
 }
 
 .login-card button:hover {
-  background-color: var(--sl-color-accent-high);
+  background-color: var(--sl-color-accent-high, #0056b3); /* Domyślny kolor akcentu po najechaniu */
 }
 
 .login-card #error {
-  color: var(--sl-color-accent-low);
+  color: var(--sl-color-accent-low, #dc3545); /* Domyślny kolor błędu */
   margin-top: 1rem;
   text-align: center;
 }

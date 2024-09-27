@@ -5,30 +5,24 @@ interface Locals {
   userRole?: string;
 }
 
-console.log('middleware.ts');
-
 export const onRequest: MiddlewareHandler = async ({ request, cookies, url, locals }, next) => {
   console.log('Middleware: Processing request for URL:', url.pathname);
 
-  // Domyślna rola użytkownika
-  let userRole = 'klient';
+  // Default user role
+  let userRole = 'guest';
 
-  // Pobierz token z ciasteczka lub nagłówka Authorization
+  // Retrieve token from cookies or Authorization header
   let token = cookies.get('token')?.value || request.headers.get('Authorization')?.split(' ')[1];
   console.log('Middleware: Token:', token);
 
-
-  console.log('Middleware: All cookies:', request.headers.get('cookie'));
-
-
   if (token) {
     try {
-      // Weryfikacja tokenu
+      // Verify token
       const user = verifyToken(token);
       userRole = user.role;
       console.log('Middleware: User role set to', userRole);
 
-      // Ustawienie ciasteczka userRole
+      // Set userRole cookie
       cookies.set('userRole', userRole, {
         path: '/',
         httpOnly: false,
@@ -40,11 +34,11 @@ export const onRequest: MiddlewareHandler = async ({ request, cookies, url, loca
       cookies.delete('token', { path: '/' });
       cookies.delete('userRole', { path: '/' });
       token = undefined;
-      userRole = 'klient';
+      userRole = 'guest';
     }
   } else {
-    console.log('Middleware: No token found, setting userRole to klient');
-    cookies.set('userRole', 'klient', {
+    console.log('Middleware: No token found, setting userRole to guest');
+    cookies.set('userRole', 'guest', {
       path: '/',
       httpOnly: false,
       secure: true,
@@ -55,19 +49,18 @@ export const onRequest: MiddlewareHandler = async ({ request, cookies, url, loca
   console.log('Middleware: userRole cookie after processing:', cookies.get('userRole')?.value);
   console.log('Middleware: Checking access for path:', url.pathname, 'with userRole:', userRole);
 
-  
-  // Logika autoryzacji dostępu na podstawie roli użytkownika
+  // Access control logic based on user role
   const accessRules = {
     '/admin': ['admin'],
-    '/spolka': ['admin', 'spolka'],
-    '/realizator': ['admin', 'spolka', 'realizator'],
-    '/klient': ['admin', 'spolka', 'realizator', 'klient']
+    '/company': ['admin', 'companyMember'],
+    '/editor': ['admin', 'companyMember', 'editor'],
+    '/guest': ['admin', 'companyMember', 'editor', 'guest']
   };
 
   for (const [path, allowedRoles] of Object.entries(accessRules)) {
     if (url.pathname.startsWith(path) && !allowedRoles.includes(userRole)) {
       console.log('Middleware: Access denied for userRole:', userRole, 'to path:', url.pathname);
-      return new Response(`Brak dostępu - tylko dla ${allowedRoles.join(', ')}`, { status: 403 });
+      return new Response(`Access denied - only for ${allowedRoles.join(', ')}`, { status: 403 });
     }
   }
 
