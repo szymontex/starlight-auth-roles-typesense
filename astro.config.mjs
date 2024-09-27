@@ -3,7 +3,7 @@ import starlight from '@astrojs/starlight';
 import node from '@astrojs/node'; // Import adaptera Node.js
 import { generateSidebar } from './src/utils/sidebarUtils';
 //import starlightDocSearch from '@astrojs/starlight-docsearch';
-
+//TTTTTTTTTEEEEEEEEEEEEESSSSSSSSSSSSSTTTT
 export default defineConfig({
   output: 'server',
   
