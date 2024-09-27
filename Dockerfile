@@ -64,4 +64,4 @@ COPY --from=builder /app /app
 EXPOSE 4321
 
 # Start the application
-CMD ["pnpm", "start"]
+CMD ["sh", "-c", "node /app/initTypesense.js && pnpm start"]
