@@ -89,7 +89,7 @@ Special thanks to [Fryuni](https://github.com/Fryuni) for their contribution to 
 
 For more detailed documentation on the tools and frameworks used in this project, refer to:
 
-- **[Astro Starlight Documentation](https://docs.astro.build/en/guides/starlight/)**: Learn more about the core framework used in this project.
+- **[Astro Starlight Documentation](https://starlight.astro.build/getting-started/)**: Learn more about the core framework used in this project.
 - **[Typesense Documentation](https://typesense.org/docs/)**: Explore the documentation for Typesense, the search engine used in this project.
 
 ## Support
@@ -104,7 +104,6 @@ If you need help, you can reach out through the following channels:
 Contributions are welcome! If you'd like to contribute to this project, please follow the guidelines below:
 
 - **Contributor Manual**: Start with the Astro Starlight [Contributor Manual](https://github.com/withastro/starlight/blob/main/CONTRIBUTING.md).
-- **Code of Conduct**: Review the [Code of Conduct](https://github.com/withastro/starlight/blob/main/CODE_OF_CONDUCT.md) to understand the standards we expect.
 - **Community Guide**: Join the community discussions in the #starlight channel on Discord.
 
 ## License
